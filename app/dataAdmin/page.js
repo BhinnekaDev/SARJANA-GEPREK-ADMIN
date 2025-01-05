@@ -2,10 +2,14 @@
 import Sidebar from "@/components/sidebar";
 import Navbar from "@/components/navbar";
 import Konten from "@/app/dataAdmin/components/konten";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const Page = () => {
   return (
     <div className="flex px-4 py-4 bg-gray-100">
+      <ToastContainer />
+
       <div className="w-[300px] bg-gray-100 border-r border-gray-200">
         <Sidebar />
       </div>

@@ -10,10 +10,12 @@ import {
 } from "@material-tailwind/react";
 import Image from "next/image";
 import { IoPersonAdd } from "react-icons/io5";
+// COMPONENTS
 import ModalTambahAdmin from "@/components/modalTambahAdmin";
+import Memuat from "@/components/memuat";
 
 function Konten() {
-  const [isModalOpen, setIsModalOpen] = useState(false); // Menangani status modal
+  const [bukaModalTambahAdmin, setMembukaModalTambahAdmin] = useState(false);
 
   const daftarAdmin = [
     {
@@ -30,9 +32,6 @@ function Konten() {
 
   return (
     <div>
-      {/* Tambahkan Modal */}
-      <ModalTambahAdmin terbuka={isModalOpen} tertutup={setIsModalOpen} />
-
       <Card className="w-full h-full">
         <CardHeader floated={false} shadow={false} className="rounded-none">
           <div className="flex items-center justify-between">
@@ -43,7 +42,7 @@ function Konten() {
               className="flex items-center gap-2"
               size="sm"
               color="orange"
-              onClick={() => setIsModalOpen(true)} // Membuka modal ketika diklik
+              onClick={() => setMembukaModalTambahAdmin(true)}
             >
               <IoPersonAdd className="w-5 h-5" /> Tambah Admin
             </Button>
@@ -165,6 +164,11 @@ function Konten() {
             Total Admin: {daftarAdmin.length}
           </Typography>
         </CardFooter>
+
+        <ModalTambahAdmin
+          terbuka={bukaModalTambahAdmin}
+          tertutup={setMembukaModalTambahAdmin}
+        />
       </Card>
     </div>
   );

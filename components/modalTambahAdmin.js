@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import {
   Dialog,
   Typography,
@@ -12,27 +12,33 @@ import {
   Option,
 } from "@material-tailwind/react";
 import { XMarkIcon } from "@heroicons/react/24/outline";
+// HOOKS
+import useTambahAdmin from "@/hooks/useTambahAdmin";
+// COMPONENTS
+import Memuat from "@/components/memuat";
 
 const ModalTambahAdmin = ({ terbuka, tertutup }) => {
-  const [email, setEmail] = useState("");
-  const [namaDepan, setNamaDepan] = useState("");
-  const [namaBelakang, setNamaBelakang] = useState("");
-  const [namaPengguna, setNamaPengguna] = useState("");
-  const [jenisKelamin, setJenisKelamin] = useState("");
-  const [peranAdmin, setPeranAdmin] = useState("");
-  const [sedangMemuatTambahAdmin, setSedangMemuatTambahAdmin] = useState(false);
+  const {
+    namaDepan,
+    namaBelakang,
+    namaPengguna,
+    email,
+    jenisKelamin,
+    peranAdmin,
+    setNamaDepan,
+    setNamaBelakang,
+    setNamaPengguna,
+    setEmail,
+    setJenisKelamin,
+    setPeranAdmin,
+    tambahAdmin,
+    sedangMemuatTambahAdmin,
+  } = useTambahAdmin();
 
-  const tambahAdmin = async () => {
-    setSedangMemuatTambahAdmin(true);
-    try {
-      // Simulasi proses simpan data
-      await new Promise((resolve) => setTimeout(resolve, 2000));
-      alert("Admin berhasil ditambahkan!");
-      tertutup(false);
-    } catch (error) {
-      alert("Terjadi kesalahan saat menambahkan admin.");
-    } finally {
-      setSedangMemuatTambahAdmin(false);
+  const tanganiTambahAdmin = async () => {
+    await tambahAdmin();
+    if (!sedangMemuatTambahAdmin) {
+      tertutup();
     }
   };
 
@@ -51,7 +57,7 @@ const ModalTambahAdmin = ({ terbuka, tertutup }) => {
         <IconButton
           variant="text"
           color="gray"
-          onClick={() => tertutup(false)}
+          onClick={tertutup}
           className="text-gray-800 hover:bg-transparent"
         >
           <XMarkIcon className="h-6 w-6" />
@@ -76,7 +82,6 @@ const ModalTambahAdmin = ({ terbuka, tertutup }) => {
                 className="w-full bg-gray-100 text-gray-800"
               />
             </div>
-
             <div>
               <Typography className="mb-2" variant="h6">
                 Nama Belakang
@@ -90,7 +95,6 @@ const ModalTambahAdmin = ({ terbuka, tertutup }) => {
               />
             </div>
           </div>
-
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
               <Typography className="mb-2" variant="h6">
@@ -104,7 +108,6 @@ const ModalTambahAdmin = ({ terbuka, tertutup }) => {
                 className="w-full bg-gray-100 text-gray-800"
               />
             </div>
-
             <div>
               <Typography className="mb-2" variant="h6">
                 Email
@@ -118,7 +121,6 @@ const ModalTambahAdmin = ({ terbuka, tertutup }) => {
               />
             </div>
           </div>
-
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
               <Typography className="mb-2" variant="h6">
@@ -136,7 +138,6 @@ const ModalTambahAdmin = ({ terbuka, tertutup }) => {
               </Select>
             </div>
           </div>
-
           <div>
             <Typography className="mb-2" variant="h6">
               Peran Admin
@@ -157,11 +158,11 @@ const ModalTambahAdmin = ({ terbuka, tertutup }) => {
       <DialogFooter className="flex justify-between">
         <Button
           color="orange"
-          onClick={tambahAdmin}
+          onClick={tanganiTambahAdmin}
           disabled={sedangMemuatTambahAdmin}
-          className="w-full bg-orange-500 hover:bg-orange-600 transition duration-300"
+          className="w-full bg-orange-500 hover:bg-orange-600 transition duration-300 flex justify-center items-center"
         >
-          {sedangMemuatTambahAdmin ? "Memuat..." : "Tambah Admin"}
+          {sedangMemuatTambahAdmin ? <Memuat /> : "Tambah Admin"}
         </Button>
       </DialogFooter>
     </Dialog>

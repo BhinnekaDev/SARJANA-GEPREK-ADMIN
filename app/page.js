@@ -3,7 +3,12 @@ import React, { useState, useEffect } from "react";
 import { Button, Input, Typography, Card } from "@material-tailwind/react";
 import { motion } from "framer-motion";
 import Image from "next/image";
-
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+// COMPONENTS
+import Memuat from "@/components/memuat";
+// HOOKS
+import useMasukDenganEmailKataSandi from "@/hooks/useMasukDenganEmailKataSandi";
 const adminPromoTexts = [
   {
     title: "Kelola Semua dengan Mudah",
@@ -56,6 +61,10 @@ const LoginAdmin = () => {
   const fotoAdmin = require("@/assets/images/LogoAyam.png");
 
   const [currentTextIndex, setCurrentTextIndex] = useState(0);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  const { masukDenganEmail, sedangMemuat } = useMasukDenganEmailKataSandi();
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -67,8 +76,14 @@ const LoginAdmin = () => {
     return () => clearInterval(interval);
   }, []);
 
+  const prosesLogin = async (e) => {
+    e.preventDefault();
+    await masukDenganEmail(email, password);
+  };
+
   return (
     <div className="bg-white h-screen flex justify-center items-center ">
+      <ToastContainer />
       <Card className="w-full max-w-6xl bg-[#ffe893] p-20 rounded-3xl shadow-2xl">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 items-center h-full">
           <div className="flex flex-col justify-center items-center h-full">
@@ -126,27 +141,32 @@ const LoginAdmin = () => {
             <Typography className="text-center text-gray-600 mb-6">
               Masukkan email dan kata sandi untuk melanjutkan akses.
             </Typography>
-            <form className="space-y-6">
+            <form className="space-y-6" onSubmit={prosesLogin}>
               <Input
                 label="Email"
                 name="email"
                 variant="outlined"
-                className="w-full  bg-gray-100 rounded-lg"
+                className="w-full bg-gray-100 rounded-lg"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
               />
               <Input
                 label="Kata Sandi"
                 name="password"
                 type="password"
                 variant="outlined"
-                className="w-full  bg-gray-100 rounded-lg"
+                className="w-full bg-gray-100 rounded-lg"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
               />
               <Button
                 type="submit"
                 color="yellow"
                 variant="gradient"
                 className="w-full text-gray-800 hover:shadow-lg py-2"
+                disabled={sedangMemuat}
               >
-                Masuk
+                {sedangMemuat ? <Memuat /> : "Masuk"}
               </Button>
             </form>
           </div>
