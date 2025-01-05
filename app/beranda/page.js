@@ -7,6 +7,7 @@ import "react-toastify/dist/ReactToastify.css";
 // KOMPONEN KAMI
 import Sidebar from "@/components/sidebar";
 import Napbar from "@/components/navbar";
+
 // import Konten from "@/app/beranda/components/konten";
 
 const Beranda = () => {

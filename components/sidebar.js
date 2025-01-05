@@ -1,6 +1,15 @@
 "use client";
 import React, { useState } from "react";
-import { Card, Typography, List, ListItem, ListItemPrefix, Accordion, AccordionHeader, AccordionBody } from "@material-tailwind/react";
+import {
+  Card,
+  Typography,
+  List,
+  ListItem,
+  ListItemPrefix,
+  Accordion,
+  AccordionHeader,
+  AccordionBody,
+} from "@material-tailwind/react";
 import {
   HomeIcon,
   UserGroupIcon,
@@ -59,7 +68,12 @@ function Sidebar() {
                 <Typography color="blue-gray" className="mr-auto font-normal">
                   Partisipan
                 </Typography>
-                <ChevronDownIcon strokeWidth={2.5} className={`ml-auto h-5 w-5 transition-transform ${buka === 1 ? "rotate-180" : ""}`} />
+                <ChevronDownIcon
+                  strokeWidth={2.5}
+                  className={`ml-auto h-5 w-5 transition-transform ${
+                    buka === 1 ? "rotate-180" : ""
+                  }`}
+                />
               </AccordionHeader>
             </ListItem>
             <AccordionBody className="py-1">
@@ -96,7 +110,12 @@ function Sidebar() {
                 <Typography color="blue-gray" className="mr-auto font-normal">
                   Produk
                 </Typography>
-                <ChevronDownIcon strokeWidth={2.5} className={`ml-auto h-5 w-5 transition-transform ${buka === 2 ? "rotate-180" : ""}`} />
+                <ChevronDownIcon
+                  strokeWidth={2.5}
+                  className={`ml-auto h-5 w-5 transition-transform ${
+                    buka === 2 ? "rotate-180" : ""
+                  }`}
+                />
               </AccordionHeader>
             </ListItem>
             <AccordionBody className="py-1">
@@ -127,7 +146,12 @@ function Sidebar() {
                 <Typography color="blue-gray" className="mr-auto font-normal">
                   Aktivitas
                 </Typography>
-                <ChevronDownIcon strokeWidth={2.5} className={`ml-auto h-5 w-5 transition-transform ${buka === 3 ? "rotate-180" : ""}`} />
+                <ChevronDownIcon
+                  strokeWidth={2.5}
+                  className={`ml-auto h-5 w-5 transition-transform ${
+                    buka === 3 ? "rotate-180" : ""
+                  }`}
+                />
               </AccordionHeader>
             </ListItem>
             <AccordionBody className="py-1">
@@ -172,7 +196,12 @@ function Sidebar() {
                 <Typography color="blue-gray" className="mr-auto font-normal">
                   Pengaturan
                 </Typography>
-                <ChevronDownIcon strokeWidth={2.5} className={`ml-auto h-5 w-5 transition-transform ${buka === 4 ? "rotate-180" : ""}`} />
+                <ChevronDownIcon
+                  strokeWidth={2.5}
+                  className={`ml-auto h-5 w-5 transition-transform ${
+                    buka === 4 ? "rotate-180" : ""
+                  }`}
+                />
               </AccordionHeader>
             </ListItem>
             <AccordionBody className="py-1">
@@ -194,18 +223,29 @@ function Sidebar() {
           </Accordion>
 
           {/* Profile Section */}
-          <div className="mt-4 flex flex-col items-center">
-            <div className="relative">
-              <Image src={profilAdmin} width={60} height={60} alt="Profile Picture" className="rounded-full bg-yellow-300" />
-              <div className="absolute bottom-0 right-0 bg-green-500 w-3 h-3 rounded-full" />
+          <div className="mt-4 flex flex-col items-center bg-white p-4 rounded-lg shadow-md">
+            <div className="flex items-center w-full">
+              <Image
+                src={profilAdmin}
+                width={40}
+                height={40}
+                alt="Profile Picture"
+                className="rounded-full"
+              />
+              <div className="ml-4">
+                <Typography className="font-semibold text-sm">
+                  HengkiGanteng
+                </Typography>
+                <Typography className="text-xs text-gray-500">
+                  HengkiGanteng@gmail.com
+                </Typography>
+              </div>
+              <ChevronDownIcon className="ml-auto h-4 w-4 text-gray-500 cursor-pointer" />
             </div>
-            <Typography variant="h6" className="mt-2">
-              Nama Anda
-            </Typography>
-            <Typography color="blue-gray" className="text-sm">
-              Role
-            </Typography>
           </div>
+          <Typography className=" text-xs text-gray-400 mt-5 flex justify-center">
+            @ 2025 Bhineka Developer.
+          </Typography>
         </div>
       </List>
     </Card>
