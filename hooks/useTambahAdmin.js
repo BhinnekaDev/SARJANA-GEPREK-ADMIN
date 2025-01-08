@@ -76,6 +76,7 @@ const useTambahAdmin = () => {
       await setDoc(doc(referensiAdmin, user.uid), dataAdmin);
       toast.success("Admin berhasil ditambahkan!");
       aturUlangFormulir();
+      window.location.reload();
     } catch (error) {
       toast.error("Terjadi kesalahan saat menambahkan admin: " + error.message);
     } finally {

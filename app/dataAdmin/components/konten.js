@@ -9,46 +9,83 @@ import {
   Chip,
 } from "@material-tailwind/react";
 import Image from "next/image";
-import { IoPersonAdd } from "react-icons/io5";
+import { IoPersonAdd, IoTrashOutline } from "react-icons/io5";
 import ModalTambahAdmin from "@/components/modalTambahAdmin";
+import ModalEditAdmin from "@/components/modalEditAdmin";
 import Memuat from "@/components/memuat";
-import { getFirestore, collection, getDocs } from "firebase/firestore";
-import app from "@/lib/firebaseConfig"; // Import konfigurasi Firebase
+import {
+  getFirestore,
+  collection,
+  getDocs,
+  doc,
+  deleteDoc,
+} from "firebase/firestore";
+import app from "@/lib/firebaseConfig";
 
 function Konten() {
   const [bukaModalTambahAdmin, setMembukaModalTambahAdmin] = useState(false);
+  const [bukaModalEditAdmin, setBukaModalEditAdmin] = useState(false);
+  const [selectedAdmin, setSelectedAdmin] = useState(null);
   const [daftarAdmin, setDaftarAdmin] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [konfirmasiHapus, setKonfirmasiHapus] = useState(null);
   const profilAdmin = require("@/assets/images/profil.jpg");
 
+  // Define fetchAdminData as a separate function
+  const fetchAdminData = async () => {
+    try {
+      const db = getFirestore(app);
+      const querySnapshot = await getDocs(collection(db, "admin"));
+      const adminData = querySnapshot.docs.map((doc) => {
+        const data = doc.data();
+        return {
+          id: doc.id,
+          email: data.Email,
+          nama: data.Nama_Depan + " " + data.Nama_Belakang,
+          fungsi: data.Peran_Admin,
+          jenisKelamin: data.Jenis_Kelamin,
+          status: data.Status,
+          tanggalPembuatan:
+            data.Tanggal_Pembuatan_Akun?.toDate().toLocaleString("id-ID") ||
+            "Tidak diketahui",
+        };
+      });
+      setDaftarAdmin(adminData);
+    } catch (error) {
+      console.error("Error fetching admin data: ", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
-    const fetchAdminData = async () => {
-      try {
-        const db = getFirestore(app); // Gunakan db dari Firebase yang sudah dikonfigurasi
-        const querySnapshot = await getDocs(collection(db, "admin"));
-        const adminData = querySnapshot.docs.map((doc) => {
-          const data = doc.data();
-          return {
-            id: doc.id,
-            email: data.Email,
-            nama: data.Nama_Depan + " " + data.Nama_Belakang,
-            fungsi: data.Peran_Admin,
-            jenisKelamin: data.Jenis_Kelamin,
-            status: data.Status, // Asumsikan ada data status
-            tanggalPembuatan:
-              data.Tanggal_Pembuatan_Akun?.toDate().toLocaleString("id-ID") ||
-              "Tidak diketahui",
-          };
-        });
-        setDaftarAdmin(adminData);
-      } catch (error) {
-        console.error("Error fetching admin data: ", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchAdminData();
+    fetchAdminData(); // Call fetchAdminData on component mount
   }, []);
+
+  const handleDeleteAdmin = (adminId) => {
+    setKonfirmasiHapus(adminId);
+  };
+
+  const confirmDelete = async () => {
+    if (konfirmasiHapus) {
+      try {
+        const db = getFirestore(app);
+        await deleteDoc(doc(db, "admin", konfirmasiHapus));
+        // Reload data after deletion
+        reloadData();
+      } catch (error) {
+        console.error("Error deleting admin: ", error);
+      } finally {
+        setKonfirmasiHapus(null); // Reset confirmation
+      }
+    }
+  };
+
+  const reloadData = async () => {
+    setLoading(true);
+    await fetchAdminData(); // Call fetchAdminData to refresh admin list
+    setLoading(false); // Set loading false after completion
+  };
 
   return (
     <div>
@@ -80,40 +117,19 @@ function Konten() {
               <thead>
                 <tr>
                   <th className="border-y border-blue-gray-100 bg-blue-gray-50/50 p-4">
-                    <Typography
-                      variant="small"
-                      color="blue-gray"
-                      className="font-normal leading-none opacity-70"
-                    >
-                      Admin
-                    </Typography>
+                    Admin
                   </th>
                   <th className="border-y border-blue-gray-100 bg-blue-gray-50/50 p-4">
-                    <Typography
-                      variant="small"
-                      color="blue-gray"
-                      className="font-normal leading-none opacity-70"
-                    >
-                      Fungsi
-                    </Typography>
+                    Fungsi
                   </th>
                   <th className="border-y border-blue-gray-100 bg-blue-gray-50/50 p-4">
-                    <Typography
-                      variant="small"
-                      color="blue-gray"
-                      className="font-normal leading-none opacity-70"
-                    >
-                      Status
-                    </Typography>
+                    Status
                   </th>
                   <th className="border-y border-blue-gray-100 bg-blue-gray-50/50 p-4">
-                    <Typography
-                      variant="small"
-                      color="blue-gray"
-                      className="font-normal leading-none opacity-70"
-                    >
-                      Tanggal Pembuatan Akun
-                    </Typography>
+                    Tanggal Pembuatan Akun
+                  </th>
+                  <th className="border-y border-blue-gray-100 bg-blue-gray-50/50 p-4">
+                    Aksi
                   </th>
                 </tr>
               </thead>
@@ -123,7 +139,7 @@ function Konten() {
                     <td className="p-4 flex items-center gap-3">
                       <Image
                         src={profilAdmin}
-                        alt={`${admin.nama}`}
+                        alt={admin.nama}
                         width={40}
                         height={40}
                         className="rounded-full"
@@ -145,38 +161,34 @@ function Konten() {
                         </Typography>
                       </div>
                     </td>
-                    <td className="p-4">
-                      <Typography
-                        variant="small"
-                        color="blue-gray"
-                        className="font-normal"
-                      >
-                        {admin.fungsi}
-                      </Typography>
-                      <Typography
-                        variant="small"
-                        color="blue-gray"
-                        className="font-normal opacity-70"
-                      >
-                        {admin.jenisKelamin}
-                      </Typography>
-                    </td>
+                    <td className="p-4">{admin.fungsi}</td>
                     <td className="p-4">
                       <Chip
                         size="sm"
                         value={admin.status?.toUpperCase() || "Tidak Diketahui"}
                         color={admin.status === "Aktif" ? "green" : "red"}
-                        className="rounded-md bg-green-100 text-green-700"
                       />
                     </td>
+                    <td className="p-4">{admin.tanggalPembuatan}</td>
                     <td className="p-4">
-                      <Typography
-                        variant="small"
-                        color="blue-gray"
-                        className="font-normal"
+                      <Button
+                        color="green"
+                        size="sm"
+                        onClick={() => {
+                          setSelectedAdmin(admin);
+                          setBukaModalEditAdmin(true);
+                        }}
                       >
-                        {admin.tanggalPembuatan}
-                      </Typography>
+                        Edit
+                      </Button>
+                      <Button
+                        color="red"
+                        size="sm"
+                        onClick={() => handleDeleteAdmin(admin.id)}
+                        className="ml-2"
+                      >
+                        <IoTrashOutline className="w-5 h-5" />
+                      </Button>
                     </td>
                   </tr>
                 ))}
@@ -185,15 +197,40 @@ function Konten() {
           )}
         </CardBody>
 
-        <CardFooter className="flex items-center justify-between border-t border-blue-gray-50 p-4">
-          <Typography variant="small" color="blue-gray" className="font-normal">
-            Total Admin: {daftarAdmin.length}
-          </Typography>
-        </CardFooter>
+        {/* Modal Konfirmasi Hapus */}
+        {konfirmasiHapus && (
+          <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">
+            <div className="bg-white rounded-lg p-6 shadow-lg">
+              <Typography variant="h6">Konfirmasi Hapus</Typography>
+              <Typography>
+                Apakah Anda yakin ingin menghapus admin ini?
+              </Typography>
+              <div className="mt-4 flex justify-end">
+                <Button
+                  onClick={() => setKonfirmasiHapus(null)}
+                  color="gray"
+                  className="mr-2"
+                >
+                  Batal
+                </Button>
+                <Button onClick={confirmDelete} color="red">
+                  Hapus
+                </Button>
+              </div>
+            </div>
+          </div>
+        )}
 
+        {/* Modal Tambah dan Edit Admin */}
         <ModalTambahAdmin
           terbuka={bukaModalTambahAdmin}
           tertutup={() => setMembukaModalTambahAdmin(false)}
+        />
+        <ModalEditAdmin
+          terbuka={bukaModalEditAdmin}
+          tertutup={() => setBukaModalEditAdmin(false)}
+          admin={selectedAdmin}
+          reloadData={() => reloadData()}
         />
       </Card>
     </div>
