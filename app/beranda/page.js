@@ -7,6 +7,7 @@ import "react-toastify/dist/ReactToastify.css";
 // KOMPONEN KAMI
 import Sidebar from "@/components/sidebar";
 import Napbar from "@/components/navbar";
+import Konten from "@/app/beranda/components/konten";
 
 // import Konten from "@/app/beranda/components/konten";
 
@@ -19,8 +20,7 @@ const Beranda = () => {
       <ToastContainer />
       <Sidebar pengarah={pengarah} />
       <div className="flex flex-col flex-1 gap-4 mx-3">
-        <Napbar tahunDipilih={tahunDipilih} setTahunDipilih={setTahunDipilih} />
-        {/* <Konten tahunDipilih={tahunDipilih} /> */}
+        <Konten tahunDipilih={tahunDipilih} />
       </div>
     </section>
   );

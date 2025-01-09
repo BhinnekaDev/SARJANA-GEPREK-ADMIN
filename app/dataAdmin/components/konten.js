@@ -7,6 +7,10 @@ import {
   CardHeader,
   CardFooter,
   Chip,
+  Menu,
+  MenuHandler,
+  MenuList,
+  MenuItem,
 } from "@material-tailwind/react";
 import Image from "next/image";
 import { IoPersonAdd, IoTrashOutline } from "react-icons/io5";
@@ -21,6 +25,7 @@ import {
   deleteDoc,
 } from "firebase/firestore";
 import app from "@/lib/firebaseConfig";
+import { LuListFilter } from "react-icons/lu";
 
 function Konten() {
   const [bukaModalTambahAdmin, setMembukaModalTambahAdmin] = useState(false);
@@ -31,7 +36,6 @@ function Konten() {
   const [konfirmasiHapus, setKonfirmasiHapus] = useState(null);
   const profilAdmin = require("@/assets/images/profil.jpg");
 
-  // Define fetchAdminData as a separate function
   const fetchAdminData = async () => {
     try {
       const db = getFirestore(app);
@@ -59,7 +63,7 @@ function Konten() {
   };
 
   useEffect(() => {
-    fetchAdminData(); // Call fetchAdminData on component mount
+    fetchAdminData();
   }, []);
 
   const handleDeleteAdmin = (adminId) => {
@@ -71,43 +75,68 @@ function Konten() {
       try {
         const db = getFirestore(app);
         await deleteDoc(doc(db, "admin", konfirmasiHapus));
-        // Reload data after deletion
         reloadData();
       } catch (error) {
         console.error("Error deleting admin: ", error);
       } finally {
-        setKonfirmasiHapus(null); // Reset confirmation
+        setKonfirmasiHapus(null);
       }
     }
   };
 
   const reloadData = async () => {
     setLoading(true);
-    await fetchAdminData(); // Call fetchAdminData to refresh admin list
-    setLoading(false); // Set loading false after completion
+    await fetchAdminData();
+    setLoading(false);
   };
 
   return (
     <div>
+      <Card className="max-screen bg-white shadow-md mb-5">
+        <div className="w-full flex justify-between text-blue-gray-900 p-4">
+          <div className="space-y-2">
+            <Typography>Total Admin</Typography>
+            <Typography className="text-xl">10000</Typography>
+          </div>
+          <div className="flex items-center">
+            <Button
+              size="sm"
+              onClick={() => setMembukaModalTambahAdmin(true)}
+              className="items-center gap-2 focus:ring-0 bg-orange-400 w-40 h-8 justify-center"
+            >
+              <p className="text-white mx-auto">Tambah Admin</p>
+            </Button>
+          </div>
+        </div>
+      </Card>
       <Card className="w-full h-full">
         <CardHeader floated={false} shadow={false} className="rounded-none">
-          <div className="flex items-center justify-between">
+          <div className="flex items-center text-center justify-between mx-2">
             <Typography variant="h5" color="blue-gray">
-              Daftar Admin
+              Tabel Data Admin
             </Typography>
-            <Button
-              className="flex items-center gap-2"
-              size="sm"
-              color="orange"
-              onClick={() => setMembukaModalTambahAdmin(true)}
-            >
-              <IoPersonAdd className="w-5 h-5" /> Tambah Admin
-            </Button>
+            <div className="">
+              <Menu>
+                <MenuHandler>
+                  <Button className="flex items-center gap-4 tracking-wider bg-transparent text-black border border-gray-500 shadow-md hover:shadow-md">
+                    Filter
+                    <LuListFilter
+                      className="text-xl bg-transparent"
+                      color="black"
+                    />
+                  </Button>
+                </MenuHandler>
+                <MenuList>
+                  <MenuItem>1 Bulan</MenuItem>
+                  <MenuItem>1 Tahun</MenuItem>
+                </MenuList>
+              </Menu>
+            </div>
           </div>
         </CardHeader>
 
         <CardBody
-          className="overflow-y-auto px-0"
+          className="overflow-y-auto"
           style={{ maxHeight: "calc(100vh - 200px)" }}
         >
           {loading ? (
@@ -116,19 +145,19 @@ function Konten() {
             <table className="w-full min-w-max table-auto text-left">
               <thead>
                 <tr>
-                  <th className="border-y border-blue-gray-100 bg-blue-gray-50/50 p-4">
+                  <th className="border-y border-blue-gray-100 py-3 px-4">
                     Admin
                   </th>
-                  <th className="border-y border-blue-gray-100 bg-blue-gray-50/50 p-4">
+                  <th className="border-y border-blue-gray-100 py-2 px-4 text-center">
                     Fungsi
                   </th>
-                  <th className="border-y border-blue-gray-100 bg-blue-gray-50/50 p-4">
+                  <th className="border-y border-blue-gray-100 py-2 px-4 text-center">
                     Status
                   </th>
-                  <th className="border-y border-blue-gray-100 bg-blue-gray-50/50 p-4">
+                  <th className="border-y border-blue-gray-100 py-2 px-4 text-center">
                     Tanggal Pembuatan Akun
                   </th>
-                  <th className="border-y border-blue-gray-100 bg-blue-gray-50/50 p-4">
+                  <th className="border-y border-blue-gray-100 text-center">
                     Aksi
                   </th>
                 </tr>
@@ -136,7 +165,7 @@ function Konten() {
               <tbody>
                 {daftarAdmin.map((admin) => (
                   <tr key={admin.id} className="border-b border-blue-gray-50">
-                    <td className="p-4 flex items-center gap-3">
+                    <td className="p-5 flex items-center gap-3">
                       <Image
                         src={profilAdmin}
                         alt={admin.nama}
@@ -161,16 +190,20 @@ function Konten() {
                         </Typography>
                       </div>
                     </td>
-                    <td className="p-4">{admin.fungsi}</td>
-                    <td className="p-4">
-                      <Chip
-                        size="sm"
-                        value={admin.status?.toUpperCase() || "Tidak Diketahui"}
-                        color={admin.status === "Aktif" ? "green" : "red"}
-                      />
+                    <td className="text-center">{admin.fungsi}</td>
+                    <td className="text-center">
+                      <span
+                        className={
+                          admin.status === "Aktif"
+                            ? "bg-green-500 bg-opacity-15 text-green-500 text-xs px-4 py-2 uppercase font-bold rounded-lg tracking-wider inline-block"
+                            : "bg-red-500 bg-opacity-15 text-red-500 text-xs px-4 py-2 uppercase font-bold tracking-wider rounded-lg inline-block"
+                        }
+                      >
+                        {admin.status?.toUpperCase() || "Tidak Diketahui"}
+                      </span>
                     </td>
-                    <td className="p-4">{admin.tanggalPembuatan}</td>
-                    <td className="p-4">
+                    <td className=" text-center">{admin.tanggalPembuatan}</td>
+                    <td className="flex justify-center">
                       <Button
                         color="green"
                         size="sm"
@@ -196,42 +229,6 @@ function Konten() {
             </table>
           )}
         </CardBody>
-
-        {/* Modal Konfirmasi Hapus */}
-        {konfirmasiHapus && (
-          <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">
-            <div className="bg-white rounded-lg p-6 shadow-lg">
-              <Typography variant="h6">Konfirmasi Hapus</Typography>
-              <Typography>
-                Apakah Anda yakin ingin menghapus admin ini?
-              </Typography>
-              <div className="mt-4 flex justify-end">
-                <Button
-                  onClick={() => setKonfirmasiHapus(null)}
-                  color="gray"
-                  className="mr-2"
-                >
-                  Batal
-                </Button>
-                <Button onClick={confirmDelete} color="red">
-                  Hapus
-                </Button>
-              </div>
-            </div>
-          </div>
-        )}
-
-        {/* Modal Tambah dan Edit Admin */}
-        <ModalTambahAdmin
-          terbuka={bukaModalTambahAdmin}
-          tertutup={() => setMembukaModalTambahAdmin(false)}
-        />
-        <ModalEditAdmin
-          terbuka={bukaModalEditAdmin}
-          tertutup={() => setBukaModalEditAdmin(false)}
-          admin={selectedAdmin}
-          reloadData={() => reloadData()}
-        />
       </Card>
     </div>
   );

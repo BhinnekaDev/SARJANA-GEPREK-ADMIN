@@ -29,6 +29,8 @@ import {
 } from "@heroicons/react/24/solid";
 import Image from "next/image";
 import { ChevronDownIcon } from "@heroicons/react/24/outline";
+import { IoPersonCircle } from "react-icons/io5";
+import { IoMdLogOut } from "react-icons/io";
 
 const profilAdmin = require("@/assets/images/profil.jpg");
 function Sidebar() {
@@ -187,41 +189,21 @@ function Sidebar() {
 
         {/* Bagian Pengaturan dan Profil */}
         <div>
-          <Accordion open={buka === 4} className=" py-1">
-            <ListItem className="p-0" onClick={() => tanganiBuka(4)}>
-              <AccordionHeader className="p-3">
-                <ListItemPrefix>
-                  <Cog6ToothIcon className="h-5 w-5" />
-                </ListItemPrefix>
-                <Typography color="blue-gray" className="mr-auto font-normal">
-                  Pengaturan
-                </Typography>
-                <ChevronDownIcon
-                  strokeWidth={2.5}
-                  className={`ml-auto h-5 w-5 transition-transform ${
-                    buka === 4 ? "rotate-180" : ""
-                  }`}
-                />
-              </AccordionHeader>
-            </ListItem>
-            <AccordionBody className="py-1">
-              <List className="p-0">
-                <ListItem>
-                  <ListItemPrefix>
-                    <UserIcon className="h-5 w-5" />
-                  </ListItemPrefix>
-                  Profil Saya
-                </ListItem>
-                <ListItem>
-                  <ListItemPrefix>
-                    <PowerIcon className="h-5 w-5" />
-                  </ListItemPrefix>
-                  Keluar
-                </ListItem>
-              </List>
-            </AccordionBody>
-          </Accordion>
-
+          <div className="grid grid-cols-1">
+            <div className="flex items-center gap-3 hover:bg-gray-200 px-2 py-4 rounded-lg transition ease-in-out duration-200 cursor-pointer">
+              <IoPersonCircle className="h-6 w-6" />
+              <Typography color="blue-gray" className="mr-auto font-normal">
+                Profile Saya
+              </Typography>
+            </div>
+            <div className="flex items-center gap-3 hover:bg-gray-200 px-2 py-4 rounded-lg transition ease-in-out duration-200 cursor-pointer">
+              <IoMdLogOut className="h-6 w-6" />
+              <Typography color="blue-gray" className="mr-auto font-normal">
+                Keluar
+              </Typography>
+            </div>
+          </div>
+          <div className="border-t border-gray-400 mt-4" />
           {/* Profile Section */}
           <div className="mt-4 flex flex-col items-center bg-white p-4 rounded-lg shadow-md">
             <div className="flex items-center w-full">
@@ -240,7 +222,6 @@ function Sidebar() {
                   HengkiGanteng@gmail.com
                 </Typography>
               </div>
-              <ChevronDownIcon className="ml-auto h-4 w-4 text-gray-500 cursor-pointer" />
             </div>
           </div>
           <Typography className=" text-xs text-gray-400 mt-5 flex justify-center">
