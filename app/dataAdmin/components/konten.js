@@ -6,88 +6,64 @@ import {
   CardBody,
   CardHeader,
   CardFooter,
-  Chip,
   Menu,
   MenuHandler,
   MenuList,
   MenuItem,
+  Dialog,
 } from "@material-tailwind/react";
 import Image from "next/image";
-import { IoPersonAdd, IoTrashOutline } from "react-icons/io5";
-import ModalTambahAdmin from "@/components/modalTambahAdmin";
-import ModalEditAdmin from "@/components/modalEditAdmin";
-import Memuat from "@/components/memuat";
-import {
-  getFirestore,
-  collection,
-  getDocs,
-  doc,
-  deleteDoc,
-} from "firebase/firestore";
-import app from "@/lib/firebaseConfig";
+import { IoTrashOutline } from "react-icons/io5";
 import { LuListFilter } from "react-icons/lu";
+import { format } from "date-fns";
+
+// Components
+import ModalSuntingAdmin from "@/components/modalSuntingAdmin";
+import ModalKonfirmasiHapusAdmin from "@/components/modalKonfirmasiHapusAdmin";
+import Memuat from "@/components/memuat";
+import ModalTambahAdmin from "@/components/modalTambahAdmin";
+
+// Hooks
+import useTampilkanAdmin from "@/hooks/useTampilkanAdmin";
+import useHapusAdmin from "@/hooks/useHapusAdmin";
+import useSuntingAdmin from "@/hooks/useSuntingAdmin";
+
+const profilAdmin = require("@/assets/images/profil.jpg");
 
 function Konten() {
-  const [bukaModalTambahAdmin, setMembukaModalTambahAdmin] = useState(false);
-  const [bukaModalEditAdmin, setBukaModalEditAdmin] = useState(false);
-  const [selectedAdmin, setSelectedAdmin] = useState(null);
-  const [daftarAdmin, setDaftarAdmin] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [konfirmasiHapus, setKonfirmasiHapus] = useState(null);
-  const profilAdmin = require("@/assets/images/profil.jpg");
+  const {
+    totalAdmin,
+    daftarAdmin,
+    sedangMemuatTampilkanAdmin,
+    halaman,
+    ambilHalamanSebelumnya,
+    ambilHalamanSelanjutnya,
+  } = useTampilkanAdmin();
 
-  const fetchAdminData = async () => {
-    try {
-      const db = getFirestore(app);
-      const querySnapshot = await getDocs(collection(db, "admin"));
-      const adminData = querySnapshot.docs.map((doc) => {
-        const data = doc.data();
-        return {
-          id: doc.id,
-          email: data.Email,
-          nama: data.Nama_Depan + " " + data.Nama_Belakang,
-          fungsi: data.Peran_Admin,
-          jenisKelamin: data.Jenis_Kelamin,
-          status: data.Status,
-          tanggalPembuatan:
-            data.Tanggal_Pembuatan_Akun?.toDate().toLocaleString("id-ID") ||
-            "Tidak diketahui",
-        };
-      });
-      setDaftarAdmin(adminData);
-    } catch (error) {
-      console.error("Error fetching admin data: ", error);
-    } finally {
-      setLoading(false);
+  const { sedangMemuatHapusAdmin, hapusAdmin } = useHapusAdmin();
+  const { suntingAdmin, sedangMemuatSuntingAdmin } = useSuntingAdmin();
+
+  const [bukaModalTambahAdmin, setBukaModalTambahAdmin] = useState(false);
+  const [adminYangTerpilih, setAdminYangTerpilih] = useState(null);
+  const [bukaModalSuntingAdmin, setBukaModalSuntingAdmin] = useState(false);
+  const [bukaModalHapusAdmin, setBukaModalHapusAdmin] = useState(false);
+
+  const tanganiSunting = (admin) => {
+    setAdminYangTerpilih(admin);
+    setBukaModalSuntingAdmin(true);
+  };
+
+  const konfirmasiHapus = (idAdmin) => {
+    setAdminYangTerpilih(idAdmin);
+    setBukaModalHapusAdmin(true);
+  };
+
+  const hapus = async () => {
+    if (adminYangTerpilih) {
+      await hapusAdmin(adminYangTerpilih);
+      setBukaModalHapusAdmin(false);
+      setAdminYangTerpilih(null);
     }
-  };
-
-  useEffect(() => {
-    fetchAdminData();
-  }, []);
-
-  const handleDeleteAdmin = (adminId) => {
-    setKonfirmasiHapus(adminId);
-  };
-
-  const confirmDelete = async () => {
-    if (konfirmasiHapus) {
-      try {
-        const db = getFirestore(app);
-        await deleteDoc(doc(db, "admin", konfirmasiHapus));
-        reloadData();
-      } catch (error) {
-        console.error("Error deleting admin: ", error);
-      } finally {
-        setKonfirmasiHapus(null);
-      }
-    }
-  };
-
-  const reloadData = async () => {
-    setLoading(true);
-    await fetchAdminData();
-    setLoading(false);
   };
 
   return (
@@ -96,12 +72,12 @@ function Konten() {
         <div className="w-full flex justify-between text-blue-gray-900 p-4">
           <div className="space-y-2">
             <Typography>Total Admin</Typography>
-            <Typography className="text-xl">10000</Typography>
+            <Typography className="text-xl">{totalAdmin}</Typography>
           </div>
           <div className="flex items-center">
             <Button
               size="sm"
-              onClick={() => setMembukaModalTambahAdmin(true)}
+              onClick={() => setBukaModalTambahAdmin(true)}
               className="items-center gap-2 focus:ring-0 bg-orange-400 w-40 h-8 justify-center"
             >
               <p className="text-white mx-auto">Tambah Admin</p>
@@ -109,6 +85,7 @@ function Konten() {
           </div>
         </div>
       </Card>
+
       <Card className="w-full h-full">
         <CardHeader floated={false} shadow={false} className="rounded-none">
           <div className="flex items-center text-center justify-between mx-2">
@@ -139,7 +116,7 @@ function Konten() {
           className="overflow-y-auto"
           style={{ maxHeight: "calc(100vh - 200px)" }}
         >
-          {loading ? (
+          {sedangMemuatTampilkanAdmin ? (
             <Memuat />
           ) : (
             <table className="w-full min-w-max table-auto text-left">
@@ -168,7 +145,7 @@ function Konten() {
                     <td className="p-5 flex items-center gap-3">
                       <Image
                         src={profilAdmin}
-                        alt={admin.nama}
+                        alt={admin.Nama_Pengguna}
                         width={40}
                         height={40}
                         className="rounded-full"
@@ -179,45 +156,62 @@ function Konten() {
                           color="blue-gray"
                           className="font-medium"
                         >
-                          {admin.nama}
+                          {admin.Nama_Pengguna}
                         </Typography>
                         <Typography
                           variant="small"
                           color="blue-gray"
                           className="font-normal opacity-70"
                         >
-                          {admin.email}
+                          {admin.Email}
                         </Typography>
                       </div>
                     </td>
-                    <td className="text-center">{admin.fungsi}</td>
+                    <td className="text-center">{admin.Peran_Admin}</td>
                     <td className="text-center">
                       <span
-                        className={
-                          admin.status === "Aktif"
-                            ? "bg-green-500 bg-opacity-15 text-green-500 text-xs px-4 py-2 uppercase font-bold rounded-lg tracking-wider inline-block"
-                            : "bg-red-500 bg-opacity-15 text-red-500 text-xs px-4 py-2 uppercase font-bold tracking-wider rounded-lg inline-block"
-                        }
+                        className={(() => {
+                          const adminIdInStorage = localStorage.getItem(
+                            admin.id
+                          );
+                          if (adminIdInStorage) {
+                            return "bg-green-500 bg-opacity-15 text-green-500 text-xs px-4 py-2 uppercase font-bold rounded-lg tracking-wider inline-block";
+                          } else {
+                            return "bg-red-500 bg-opacity-15 text-red-500 text-xs px-4 py-2 uppercase font-bold tracking-wider rounded-lg inline-block";
+                          }
+                        })()}
                       >
-                        {admin.status?.toUpperCase() || "Tidak Diketahui"}
+                        {(() => {
+                          const adminIdInStorage = localStorage.getItem(
+                            admin.id
+                          );
+                          return adminIdInStorage ? "Aktif" : "Tidak Aktif";
+                        })()}
                       </span>
                     </td>
-                    <td className=" text-center">{admin.tanggalPembuatan}</td>
+
+                    <td className="text-center">
+                      {admin.Tanggal_Pembuatan_Akun
+                        ? format(
+                            new Date(
+                              admin.Tanggal_Pembuatan_Akun.seconds * 1000
+                            ),
+                            "yyyy-MM-dd"
+                          )
+                        : "Tidak Diketahui"}
+                    </td>
                     <td className="flex justify-center">
                       <Button
                         color="green"
                         size="sm"
-                        onClick={() => {
-                          setSelectedAdmin(admin);
-                          setBukaModalEditAdmin(true);
-                        }}
+                        onClick={() => tanganiSunting(admin.id)}
                       >
                         Edit
                       </Button>
                       <Button
                         color="red"
                         size="sm"
-                        onClick={() => handleDeleteAdmin(admin.id)}
+                        onClick={() => konfirmasiHapus(admin.id)}
                         className="ml-2"
                       >
                         <IoTrashOutline className="w-5 h-5" />
@@ -229,7 +223,54 @@ function Konten() {
             </table>
           )}
         </CardBody>
+
+        <CardFooter className="flex items-center justify-between border-t border-blue-gray-50 p-4">
+          <Typography variant="small" color="blue-gray" className="font-normal">
+            Halaman {halaman} dari {Math.ceil(totalAdmin / 5)}
+          </Typography>
+          <div className="flex items-center gap-2">
+            <Button
+              onClick={ambilHalamanSebelumnya}
+              variant="outlined"
+              size="sm"
+              disabled={sedangMemuatTampilkanAdmin || halaman === 1}
+            >
+              Sebelumnya
+            </Button>
+            <Button
+              onClick={ambilHalamanSelanjutnya}
+              variant="outlined"
+              size="sm"
+              disabled={
+                sedangMemuatTampilkanAdmin ||
+                halaman === Math.ceil(totalAdmin / 5)
+              }
+            >
+              Selanjutnya
+            </Button>
+          </div>
+        </CardFooter>
       </Card>
+
+      <ModalTambahAdmin
+        terbuka={bukaModalTambahAdmin}
+        tertutup={setBukaModalTambahAdmin}
+      />
+      <ModalSuntingAdmin
+        terbuka={bukaModalSuntingAdmin}
+        tertutup={setBukaModalSuntingAdmin}
+        adminYangTerpilih={adminYangTerpilih}
+        suntingAdmin={suntingAdmin}
+        sedangMemuatSuntingAdmin={sedangMemuatSuntingAdmin}
+      />
+
+      <ModalKonfirmasiHapusAdmin
+        terbuka={bukaModalHapusAdmin}
+        tertutup={setBukaModalHapusAdmin}
+        adminYangTerpilih={adminYangTerpilih}
+        konfirmasiHapusAdmin={hapus}
+        sedangMemuatHapusAdmin={sedangMemuatHapusAdmin}
+      />
     </div>
   );
 }

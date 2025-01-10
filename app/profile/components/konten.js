@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Card,
   Typography,
@@ -9,18 +9,16 @@ import {
 } from "@material-tailwind/react";
 import Image from "next/image";
 
+// HOOKS
+import useTampilkanAdminSesuaiID from "@/hooks/useTampilkanAdminSesuaiID";
+import useSuntingAdmin from "@/hooks/useSuntingAdmin";
+
 function Konten() {
   const gambarBawaan = require("@/assets/images/profil.jpg");
   const [isEditable, setIsEditable] = useState(false);
-  const [adminData, setAdminData] = useState({
-    Foto: null, // null agar menggunakan gambar bawaan
-    NamaDepan: "Admin",
-    NamaBelakang: "User",
-    Email: "admin@example.com",
-    NoTelepon: "08123456789",
-    Peran: "Administrator",
-    JenisKelamin: "Laki-laki", // Tambahkan jenis kelamin
-  });
+
+  const { adminData, memuatTampilkanAdminSesuaiID } =
+    useTampilkanAdminSesuaiID();
 
   const tanganiInput = (e) => {
     const { name, value } = e.target;
@@ -29,22 +27,26 @@ function Konten() {
 
   const toggleEdit = () => setIsEditable(!isEditable);
 
+  if (memuatTampilkanAdminSesuaiID) {
+    return <div>Memuat data...</div>;
+  }
+
   return (
     <Card className="h-full w-full p-8 bg-white shadow-lg rounded-lg">
       <div className="flex items-center gap-x-8 pb-8 border-b border-gray-300">
         <div className="relative w-32 h-32">
           <Image
-            src={adminData.Foto ? adminData.Foto : gambarBawaan}
+            src={adminData?.Foto ? adminData.Foto : gambarBawaan}
             className="w-full h-full object-cover rounded-lg border-4 border-gray-300"
             alt="Profil"
           />
         </div>
         <div>
           <Typography variant="h5" className="font-bold text-gray-900">
-            {adminData.NamaDepan} {adminData.NamaBelakang}
+            {adminData?.Nama_Depan} {adminData?.Nama_Belakang}
           </Typography>
           <Typography className="text-sm text-gray-500">
-            {adminData.Email}
+            {adminData?.Email}
           </Typography>
         </div>
       </div>
@@ -54,40 +56,44 @@ function Konten() {
           {
             label: "Nama Depan",
             name: "NamaDepan",
-            value: adminData.NamaDepan,
+            value: adminData?.Nama_Depan,
           },
           {
             label: "Nama Belakang",
             name: "NamaBelakang",
-            value: adminData.NamaBelakang,
+            value: adminData?.Nama_Belakang,
           },
-          { label: "Email", name: "Email", value: adminData.Email },
+          { label: "Email", name: "Email", value: adminData?.Email },
           {
             label: "Jenis Kelamin",
             name: "JenisKelamin",
-            value: adminData.JenisKelamin,
+            value: adminData?.Jenis_Kelamin,
             component: isEditable ? (
               <Select
-                name="JenisKelamin"
-                value={adminData.JenisKelamin}
+                name_="JenisKelamin"
+                value={adminData?.Jenis_Kelamin}
                 onChange={(e) =>
-                  setAdminData({ ...adminData, JenisKelamin: e })
+                  setAdminData({ ...adminData, Jenis_Kelamin: e })
                 }
                 className="mt-1"
               >
-                <Option value="Laki-laki">Laki-laki</Option>
-                <Option value="Perempuan">Perempuan</Option>
+                <Option value="Pria">Pria</Option>
+                <Option value="Wanita">Wanita</Option>
               </Select>
             ) : (
-              <Input value={adminData.JenisKelamin} disabled className="mt-1" />
+              <Input
+                value={adminData?.Jenis_Kelamin}
+                disabled
+                className="mt-1"
+              />
             ),
           },
           {
-            label: "No. Telepon",
-            name: "NoTelepon",
-            value: adminData.NoTelepon,
+            label: "Nama Pengguna",
+            name: "NamaPengguna",
+            value: adminData?.Nama_Pengguna,
           },
-          { label: "Peran", name: "Peran", value: adminData.Peran },
+          { label: "Peran", name: "Peran", value: adminData?.Peran_Admin },
         ].map((field, index) => (
           <div key={index}>
             <Typography className="font-medium text-gray-700">
