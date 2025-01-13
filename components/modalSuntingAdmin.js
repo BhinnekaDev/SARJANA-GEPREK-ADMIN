@@ -15,7 +15,7 @@ import { XMarkIcon } from "@heroicons/react/24/outline";
 // KOMPONEN KAMI
 import Memuat from "@/components/memuat";
 // PENGAIT KAMI
-import useSuntingAdmin from "@/hooks/useSuntingAdmin";
+import useSuntingAdmin from "@/hooks/Backend/useSuntingAdmin";
 
 const ModalSuntingAdmin = ({ terbuka, tertutup, adminYangTerpilih }) => {
   useEffect(() => {

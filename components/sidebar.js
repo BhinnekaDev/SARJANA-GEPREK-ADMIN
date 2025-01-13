@@ -31,6 +31,7 @@ import Image from "next/image";
 import { ChevronDownIcon } from "@heroicons/react/24/outline";
 import { IoPersonCircle } from "react-icons/io5";
 import { IoMdLogOut } from "react-icons/io";
+import useNavbarAktif from "@/hooks/Frontend/useSidebarAktif";
 
 const profilAdmin = require("@/assets/images/profil.jpg");
 function Sidebar() {
@@ -40,6 +41,7 @@ function Sidebar() {
     setBuka(buka === nilai ? 0 : nilai);
   };
 
+  const { navbarAktif, handlenavbarAktif } = useNavbarAktif();
   return (
     <Card className="h-[calc(100vh-2rem)] w-full max-w-[20rem] p-4 shadow-xl shadow-blue-gray-900/5 flex flex-col">
       <div className="mb-4 p-2">
@@ -53,7 +55,12 @@ function Sidebar() {
       <List className="flex flex-col justify-between flex-grow ">
         {/* Bagian Menu */}
         <div>
-          <ListItem className="bg-orange-400 text-white">
+          <ListItem
+            className={`${
+              navbarAktif === "/beranda" ? "bg-orange-400 text-white" : ""
+            }`}
+            onClick={() => handlenavbarAktif("/beranda")}
+          >
             <ListItemPrefix>
               <HomeIcon className="h-5 w-5" />
             </ListItemPrefix>
@@ -62,12 +69,29 @@ function Sidebar() {
 
           {/* Dropdown: Partisipan */}
           <Accordion open={buka === 1} className=" py-1 ">
-            <ListItem className="p-0" onClick={() => tanganiBuka(1)}>
+            <ListItem
+              className={`${
+                navbarAktif === "/dataAdmin" ? "bg-orange-400 p-0" : "p-0"
+              }`}
+              onClick={() => tanganiBuka(1)}
+            >
               <AccordionHeader className="p-3 border-none">
                 <ListItemPrefix>
-                  <UserGroupIcon className="h-5 w-5" />
+                  <UserGroupIcon
+                    className={`${
+                      navbarAktif === "/dataAdmin"
+                        ? "text-white h-5 w-5"
+                        : "h-5 w-5"
+                    }`}
+                  />
                 </ListItemPrefix>
-                <Typography color="blue-gray" className="mr-auto font-normal">
+                <Typography
+                  className={`${
+                    navbarAktif === "/dataAdmin"
+                      ? "text-white mr-auto font-normal"
+                      : "mr-auto font-normal"
+                  }`}
+                >
                   Partisipan
                 </Typography>
                 <ChevronDownIcon
@@ -80,7 +104,14 @@ function Sidebar() {
             </ListItem>
             <AccordionBody className="py-1">
               <List className="p-0">
-                <ListItem>
+                <ListItem
+                  className={`${
+                    navbarAktif === "/dataAdmin"
+                      ? "bg-orange-400 text-white"
+                      : ""
+                  }`}
+                  onClick={() => handlenavbarAktif("/dataAdmin")}
+                >
                   <ListItemPrefix>
                     <UserCircleIcon className="h-5 w-5" />
                   </ListItemPrefix>
@@ -189,10 +220,17 @@ function Sidebar() {
 
         {/* Bagian Pengaturan dan Profil */}
         <div>
-          <div className="grid grid-cols-1">
-            <div className="flex items-center gap-3 hover:bg-gray-200 px-2 py-4 rounded-lg transition ease-in-out duration-200 cursor-pointer">
+          <div className="grid grid-cols-1 space-y-1">
+            <div
+              className={`${
+                navbarAktif === "/profile"
+                  ? "bg-orange-400 text-white flex items-center gap-3 hover:bg-gray-200 px-2 py-4 rounded-lg transition ease-in-out duration-200 cursor-pointer"
+                  : "flex items-center gap-3 hover:bg-gray-200 px-2 py-4 rounded-lg transition ease-in-out duration-200 cursor-pointer"
+              }`}
+              onClick={() => handlenavbarAktif("/profile")}
+            >
               <IoPersonCircle className="h-6 w-6" />
-              <Typography color="blue-gray" className="mr-auto font-normal">
+              <Typography className="mr-auto font-normal">
                 Profile Saya
               </Typography>
             </div>

@@ -10,7 +10,7 @@ import {
   Option,
   Typography,
 } from "@material-tailwind/react";
-import useEditAdmin from "@/hooks/useEditAdmin";
+import useEditAdmin from "@/hooks/Backend/useEditAdmin";
 
 function ModalEditAdmin({ terbuka, tertutup, admin, reloadData }) {
   const [namaDepan, setNamaDepan] = useState(admin?.namaDepan || "");

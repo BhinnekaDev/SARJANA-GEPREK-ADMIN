@@ -24,9 +24,9 @@ import Memuat from "@/components/memuat";
 import ModalTambahAdmin from "@/components/modalTambahAdmin";
 
 // Hooks
-import useTampilkanAdmin from "@/hooks/useTampilkanAdmin";
-import useHapusAdmin from "@/hooks/useHapusAdmin";
-import useSuntingAdmin from "@/hooks/useSuntingAdmin";
+import useTampilkanAdmin from "@/hooks/Backend/useTampilkanAdmin";
+import useHapusAdmin from "@/hooks/Backend/useHapusAdmin";
+import useSuntingAdmin from "@/hooks/Backend/useSuntingAdmin";
 
 const profilAdmin = require("@/assets/images/profil.jpg");
 

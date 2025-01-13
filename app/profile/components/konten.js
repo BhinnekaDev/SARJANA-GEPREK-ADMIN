@@ -10,8 +10,8 @@ import {
 import Image from "next/image";
 
 // HOOKS
-import useTampilkanAdminSesuaiID from "@/hooks/useTampilkanAdminSesuaiID";
-import useSuntingAdmin from "@/hooks/useSuntingAdmin";
+import useTampilkanAdminSesuaiID from "@/hooks/Backend/useTampilkanAdminSesuaiID";
+import useSuntingAdmin from "@/hooks/Backend/useSuntingAdmin";
 
 function Konten() {
   const gambarBawaan = require("@/assets/images/profil.jpg");

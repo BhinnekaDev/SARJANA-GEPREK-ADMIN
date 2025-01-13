@@ -13,7 +13,7 @@ import {
 } from "@material-tailwind/react";
 import { XMarkIcon } from "@heroicons/react/24/outline";
 // HOOKS
-import useTambahAdmin from "@/hooks/useTambahAdmin";
+import useTambahAdmin from "@/hooks/Backend/useTambahAdmin";
 // COMPONENTS
 import Memuat from "@/components/memuat";
 
