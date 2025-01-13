@@ -9,9 +9,9 @@ import {
   Textarea,
   Button,
 } from "@material-tailwind/react";
-import { FaFileUpload } from "react-icons/fa"; // Tambahkan ini
+import { FaFileUpload } from "react-icons/fa";
 
-const ModalTambahMenuMakanan = ({
+const ModalTambahMenuMinuman = ({
   terbuka,
   ubahStatusModal,
   menuBaru,
@@ -27,17 +27,17 @@ const ModalTambahMenuMakanan = ({
 
   return (
     <Dialog open={terbuka} handler={ubahStatusModal}>
-      <DialogHeader>Tambah Menu Baru</DialogHeader>
+      <DialogHeader>Tambah Menu Minuman Baru</DialogHeader>
       <DialogBody>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <Input
-            label="Nama Menu"
+            label="Nama Minuman"
             name="name"
             value={menuBaru.name}
             onChange={ubahInputMenu}
           />
           <Input
-            label="Kategori"
+            label="Kategori Minuman"
             name="category"
             value={menuBaru.category}
             onChange={ubahInputMenu}
@@ -55,7 +55,7 @@ const ModalTambahMenuMakanan = ({
             >
               <FaFileUpload className="text-blue-500" size={20} />
               <span className="text-gray-700 text-sm w-full text-left">
-                Masukkan foto makanan
+                Masukkan foto minuman
               </span>
               <input
                 id="upload-image"
@@ -75,7 +75,7 @@ const ModalTambahMenuMakanan = ({
             )}
           </div>
           <Textarea
-            label="Deskripsi"
+            label="Deskripsi Minuman"
             name="description"
             value={menuBaru.description}
             onChange={ubahInputMenu}
@@ -93,7 +93,7 @@ const ModalTambahMenuMakanan = ({
         </Button>
         <Button
           variant="gradient"
-          color="orange"
+          color="blue"
           onClick={() => {
             tambahMenu();
             ubahStatusModal();
@@ -106,4 +106,4 @@ const ModalTambahMenuMakanan = ({
   );
 };
 
-export default ModalTambahMenuMakanan;
+export default ModalTambahMenuMinuman;

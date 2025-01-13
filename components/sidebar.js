@@ -71,7 +71,9 @@ function Sidebar() {
           <Accordion open={buka === 1} className=" py-1 ">
             <ListItem
               className={`${
-                navbarAktif === "/dataAdmin" ? "bg-orange-400 p-0" : "p-0"
+                navbarAktif === "/dataAdmin" || navbarAktif === "/dataPengguna"
+                  ? "bg-orange-400 p-0"
+                  : "p-0"
               }`}
               onClick={() => tanganiBuka(1)}
             >
@@ -79,7 +81,8 @@ function Sidebar() {
                 <ListItemPrefix>
                   <UserGroupIcon
                     className={`${
-                      navbarAktif === "/dataAdmin"
+                      navbarAktif === "/dataAdmin" ||
+                      navbarAktif === "/dataPengguna"
                         ? "text-white h-5 w-5"
                         : "h-5 w-5"
                     }`}
@@ -87,7 +90,8 @@ function Sidebar() {
                 </ListItemPrefix>
                 <Typography
                   className={`${
-                    navbarAktif === "/dataAdmin"
+                    navbarAktif === "/dataAdmin" ||
+                    navbarAktif === "/dataPengguna"
                       ? "text-white mr-auto font-normal"
                       : "mr-auto font-normal"
                   }`}
@@ -117,30 +121,51 @@ function Sidebar() {
                   </ListItemPrefix>
                   Admin
                 </ListItem>
-                <ListItem>
+                <ListItem
+                  className={`${
+                    navbarAktif === "/dataPengguna"
+                      ? "bg-orange-400 text-white"
+                      : ""
+                  }`}
+                  onClick={() => handlenavbarAktif("/dataPengguna")}
+                >
                   <ListItemPrefix>
                     <UserIcon className="h-5 w-5" />
                   </ListItemPrefix>
                   Pengguna
                 </ListItem>
-                <ListItem>
-                  <ListItemPrefix>
-                    <BuildingOffice2Icon className="h-5 w-5" />
-                  </ListItemPrefix>
-                  Perusahaan
-                </ListItem>
               </List>
             </AccordionBody>
           </Accordion>
 
-          {/* Dropdown: Produk */}
           <Accordion open={buka === 2} className=" py-1">
-            <ListItem className="p-0" onClick={() => tanganiBuka(2)}>
+            <ListItem
+              className={`${
+                navbarAktif === "/dataMakanan" || navbarAktif === "/dataMinuman"
+                  ? "bg-orange-400 p-0"
+                  : "p-0"
+              }`}
+              onClick={() => tanganiBuka(2)}
+            >
               <AccordionHeader className="p-3 border-none">
                 <ListItemPrefix>
-                  <PresentationChartBarIcon className="h-5 w-5" />
+                  <PresentationChartBarIcon
+                    className={`${
+                      navbarAktif === "/dataMakanan" ||
+                      navbarAktif === "/dataMinuman"
+                        ? "text-white h-5 w-5"
+                        : "h-5 w-5"
+                    }`}
+                  />
                 </ListItemPrefix>
-                <Typography color="blue-gray" className="mr-auto font-normal">
+                <Typography
+                  className={`${
+                    navbarAktif === "/dataMakanan" ||
+                    navbarAktif === "/dataMinuman"
+                      ? "text-white mr-auto font-normal"
+                      : "mr-auto font-normal"
+                  }`}
+                >
                   Produk
                 </Typography>
                 <ChevronDownIcon
@@ -153,29 +178,34 @@ function Sidebar() {
             </ListItem>
             <AccordionBody className="py-1">
               <List className="p-0">
-                <ListItem>
+                <ListItem
+                  className={`${
+                    navbarAktif === "/dataMakanan"
+                      ? "bg-orange-400 text-white"
+                      : ""
+                  }`}
+                  onClick={() => handlenavbarAktif("/dataMakanan")}
+                >
                   <ListItemPrefix>
                     <InformationCircleIcon className="h-5 w-5" />
                   </ListItemPrefix>
                   Makanan
                 </ListItem>
-                <ListItem>
+                <ListItem
+                  className={`${
+                    navbarAktif === "/dat==" ? "bg-orange-400 text-white" : ""
+                  }`}
+                  onClick={() => handlenavbarAktif("/dataMinuman")}
+                >
                   <ListItemPrefix>
                     <CircleStackIcon className="h-5 w-5" />
                   </ListItemPrefix>
                   Minuman
                 </ListItem>
-                <ListItem>
-                  <ListItemPrefix>
-                    <CircleStackIcon className="h-5 w-5" />
-                  </ListItemPrefix>
-                  Lainnya
-                </ListItem>
               </List>
             </AccordionBody>
           </Accordion>
 
-          {/* Dropdown: Aktivitas */}
           <Accordion open={buka === 3} className=" py-1">
             <ListItem className="p-0" onClick={() => tanganiBuka(3)}>
               <AccordionHeader className="p-3 border-none">
