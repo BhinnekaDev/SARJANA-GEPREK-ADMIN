@@ -157,13 +157,19 @@ function Sidebar() {
                   <ListItemPrefix>
                     <InformationCircleIcon className="h-5 w-5" />
                   </ListItemPrefix>
-                  Informasi
+                  Makanan
                 </ListItem>
                 <ListItem>
                   <ListItemPrefix>
                     <CircleStackIcon className="h-5 w-5" />
                   </ListItemPrefix>
-                  Jasa
+                  Minuman
+                </ListItem>
+                <ListItem>
+                  <ListItemPrefix>
+                    <CircleStackIcon className="h-5 w-5" />
+                  </ListItemPrefix>
+                  Lainnya
                 </ListItem>
               </List>
             </AccordionBody>
