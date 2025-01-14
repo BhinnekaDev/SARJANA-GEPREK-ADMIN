@@ -160,7 +160,7 @@ const ModalTambahAdmin = ({ terbuka, tertutup }) => {
           color="orange"
           onClick={tanganiTambahAdmin}
           disabled={sedangMemuatTambahAdmin}
-          className="w-full bg-orange-500 hover:bg-orange-600 transition duration-300 flex justify-center items-center"
+          className="w-full bg-blue-700 hover:bg-blue-900 transition duration-300 flex justify-center items-center"
         >
           {sedangMemuatTambahAdmin ? <Memuat /> : "Tambah Admin"}
         </Button>

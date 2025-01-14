@@ -9,7 +9,7 @@ import {
   Textarea,
   Button,
 } from "@material-tailwind/react";
-import { FaFileUpload } from "react-icons/fa"; // Tambahkan ini
+import { FaFileUpload } from "react-icons/fa";
 
 const ModalTambahMenuMakanan = ({
   terbuka,
@@ -93,7 +93,7 @@ const ModalTambahMenuMakanan = ({
         </Button>
         <Button
           variant="gradient"
-          color="orange"
+          color="blue"
           onClick={() => {
             tambahMenu();
             ubahStatusModal();
