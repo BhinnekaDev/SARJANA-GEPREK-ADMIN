@@ -1,15 +1,6 @@
 "use client";
 import React, { useState } from "react";
-import {
-  Card,
-  Typography,
-  List,
-  ListItem,
-  ListItemPrefix,
-  Accordion,
-  AccordionHeader,
-  AccordionBody,
-} from "@material-tailwind/react";
+import { Card, Typography, List, ListItem, ListItemPrefix, Accordion, AccordionHeader, AccordionBody } from "@material-tailwind/react";
 import {
   HomeIcon,
   UserGroupIcon,
@@ -39,9 +30,13 @@ import { toast } from "react-toastify";
 import { auth } from "@/lib/firebaseConfig";
 import { signOut } from "firebase/auth";
 
+// MY HOOKS
+import useLogout from "@/hooks/Backend/useKeluarAkun";
+
 const profilAdmin = require("@/assets/images/profil.jpg");
 function Sidebar() {
   const [buka, setBuka] = useState(0);
+  const handleLogout = useLogout();
 
   const tanganiBuka = (nilai) => {
     setBuka(buka === nilai ? 0 : nilai);
@@ -49,15 +44,6 @@ function Sidebar() {
 
   const { navbarAktif, handlenavbarAktif } = useNavbarAktif();
 
-  const handleLogout = async () => {
-    try {
-      await signOut(auth); // Proses logout
-      toast.success("Anda telah berhasil keluar."); // Notifikasi sukses
-      window.location.href = "/"; // Arahkan ke halaman login
-    } catch (error) {
-      toast.error(`Gagal keluar: ${error.message}`); // Notifikasi error
-    }
-  };
   return (
     <Card className="h-[calc(100vh-2rem)] w-full max-w-[20rem] p-4 shadow-xl shadow-blue-gray-900/5 flex flex-col">
       <div className="mb-4 p-2">
@@ -71,12 +57,7 @@ function Sidebar() {
       <List className="flex flex-col justify-between flex-grow ">
         {/* Bagian Menu */}
         <div>
-          <ListItem
-            className={`${
-              navbarAktif === "/beranda" ? "bg-blue-500 text-white" : ""
-            }`}
-            onClick={() => handlenavbarAktif("/beranda")}
-          >
+          <ListItem className={`${navbarAktif === "/beranda" ? "bg-blue-500 text-white" : ""}`} onClick={() => handlenavbarAktif("/beranda")}>
             <ListItemPrefix>
               <HomeIcon className="h-5 w-5" />
             </ListItemPrefix>
@@ -85,64 +66,24 @@ function Sidebar() {
 
           {/* Dropdown: Partisipan */}
           <Accordion open={buka === 1} className=" py-1 ">
-            <ListItem
-              className={`${
-                navbarAktif === "/dataAdmin" || navbarAktif === "/dataPengguna"
-                  ? "bg-blue-500 p-0"
-                  : "p-0"
-              }`}
-              onClick={() => tanganiBuka(1)}
-            >
+            <ListItem className={`${navbarAktif === "/dataAdmin" || navbarAktif === "/dataPengguna" ? "bg-blue-500 p-0" : "p-0"}`} onClick={() => tanganiBuka(1)}>
               <AccordionHeader className="p-3 border-none">
                 <ListItemPrefix>
-                  <UserGroupIcon
-                    className={`${
-                      navbarAktif === "/dataAdmin" ||
-                      navbarAktif === "/dataPengguna"
-                        ? "text-white h-5 w-5"
-                        : "h-5 w-5"
-                    }`}
-                  />
+                  <UserGroupIcon className={`${navbarAktif === "/dataAdmin" || navbarAktif === "/dataPengguna" ? "text-white h-5 w-5" : "h-5 w-5"}`} />
                 </ListItemPrefix>
-                <Typography
-                  className={`${
-                    navbarAktif === "/dataAdmin" ||
-                    navbarAktif === "/dataPengguna"
-                      ? "text-white mr-auto font-normal"
-                      : "mr-auto font-normal"
-                  }`}
-                >
-                  Partisipan
-                </Typography>
-                <ChevronDownIcon
-                  strokeWidth={2.5}
-                  className={`ml-auto h-5 w-5 transition-transform ${
-                    buka === 1 ? "rotate-180" : ""
-                  }`}
-                />
+                <Typography className={`${navbarAktif === "/dataAdmin" || navbarAktif === "/dataPengguna" ? "text-white mr-auto font-normal" : "mr-auto font-normal"}`}>Partisipan</Typography>
+                <ChevronDownIcon strokeWidth={2.5} className={`ml-auto h-5 w-5 transition-transform ${buka === 1 ? "rotate-180" : ""}`} />
               </AccordionHeader>
             </ListItem>
             <AccordionBody className="py-1">
               <List className="p-0">
-                <ListItem
-                  className={`${
-                    navbarAktif === "/dataAdmin" ? "bg-blue-500 text-white" : ""
-                  }`}
-                  onClick={() => handlenavbarAktif("/dataAdmin")}
-                >
+                <ListItem className={`${navbarAktif === "/dataAdmin" ? "bg-blue-500 text-white" : ""}`} onClick={() => handlenavbarAktif("/dataAdmin")}>
                   <ListItemPrefix>
                     <UserCircleIcon className="h-5 w-5" />
                   </ListItemPrefix>
                   Admin
                 </ListItem>
-                <ListItem
-                  className={`${
-                    navbarAktif === "/dataPengguna"
-                      ? "bg-blue-500 text-white"
-                      : ""
-                  }`}
-                  onClick={() => handlenavbarAktif("/dataPengguna")}
-                >
+                <ListItem className={`${navbarAktif === "/dataPengguna" ? "bg-blue-500 text-white" : ""}`} onClick={() => handlenavbarAktif("/dataPengguna")}>
                   <ListItemPrefix>
                     <UserIcon className="h-5 w-5" />
                   </ListItemPrefix>
@@ -153,66 +94,24 @@ function Sidebar() {
           </Accordion>
 
           <Accordion open={buka === 2} className=" py-1">
-            <ListItem
-              className={`${
-                navbarAktif === "/dataMakanan" || navbarAktif === "/dataMinuman"
-                  ? "bg-blue-500 p-0"
-                  : "p-0"
-              }`}
-              onClick={() => tanganiBuka(2)}
-            >
+            <ListItem className={`${navbarAktif === "/dataMakanan" || navbarAktif === "/dataMinuman" ? "bg-blue-500 p-0" : "p-0"}`} onClick={() => tanganiBuka(2)}>
               <AccordionHeader className="p-3 border-none">
                 <ListItemPrefix>
-                  <PresentationChartBarIcon
-                    className={`${
-                      navbarAktif === "/dataMakanan" ||
-                      navbarAktif === "/dataMinuman"
-                        ? "text-white h-5 w-5"
-                        : "h-5 w-5"
-                    }`}
-                  />
+                  <PresentationChartBarIcon className={`${navbarAktif === "/dataMakanan" || navbarAktif === "/dataMinuman" ? "text-white h-5 w-5" : "h-5 w-5"}`} />
                 </ListItemPrefix>
-                <Typography
-                  className={`${
-                    navbarAktif === "/dataMakanan" ||
-                    navbarAktif === "/dataMinuman"
-                      ? "text-white mr-auto font-normal"
-                      : "mr-auto font-normal"
-                  }`}
-                >
-                  Produk
-                </Typography>
-                <ChevronDownIcon
-                  strokeWidth={2.5}
-                  className={`ml-auto h-5 w-5 transition-transform ${
-                    buka === 2 ? "rotate-180" : ""
-                  }`}
-                />
+                <Typography className={`${navbarAktif === "/dataMakanan" || navbarAktif === "/dataMinuman" ? "text-white mr-auto font-normal" : "mr-auto font-normal"}`}>Produk</Typography>
+                <ChevronDownIcon strokeWidth={2.5} className={`ml-auto h-5 w-5 transition-transform ${buka === 2 ? "rotate-180" : ""}`} />
               </AccordionHeader>
             </ListItem>
             <AccordionBody className="py-1">
               <List className="p-0">
-                <ListItem
-                  className={`${
-                    navbarAktif === "/dataMakanan"
-                      ? "bg-blue-500 text-white"
-                      : ""
-                  }`}
-                  onClick={() => handlenavbarAktif("/dataMakanan")}
-                >
+                <ListItem className={`${navbarAktif === "/dataMakanan" ? "bg-blue-500 text-white" : ""}`} onClick={() => handlenavbarAktif("/dataMakanan")}>
                   <ListItemPrefix>
                     <FaBowlFood className="h-5 w-5" />
                   </ListItemPrefix>
                   Makanan
                 </ListItem>
-                <ListItem
-                  className={`${
-                    navbarAktif === "/dataMinuman"
-                      ? "bg-blue-500 text-white"
-                      : ""
-                  }`}
-                  onClick={() => handlenavbarAktif("/dataMinuman")}
-                >
+                <ListItem className={`${navbarAktif === "/dataMinuman" ? "bg-blue-500 text-white" : ""}`} onClick={() => handlenavbarAktif("/dataMinuman")}>
                   <ListItemPrefix>
                     <MdEmojiFoodBeverage className="h-5 w-5" />
                   </ListItemPrefix>
@@ -223,60 +122,24 @@ function Sidebar() {
           </Accordion>
 
           <Accordion open={buka === 3} className=" py-1">
-            <ListItem
-              className={`${
-                navbarAktif === "/dataTransaksi" ||
-                navbarAktif === "/dataTestimoni"
-                  ? "bg-blue-500 p-0"
-                  : "p-0"
-              }`}
-              onClick={() => tanganiBuka(3)}
-            >
+            <ListItem className={`${navbarAktif === "/dataTransaksi" || navbarAktif === "/dataTestimoni" ? "bg-blue-500 p-0" : "p-0"}`} onClick={() => tanganiBuka(3)}>
               <AccordionHeader className="p-3 border-none">
                 <ListItemPrefix>
                   <ClockIcon className="h-5 w-5" />
                 </ListItemPrefix>
-                <Typography
-                  className={`${
-                    navbarAktif === "/dataTransaksi" ||
-                    navbarAktif === "/dataTestimoni"
-                      ? "text-white mr-auto font-normal"
-                      : "mr-auto font-normal"
-                  }`}
-                >
-                  Aktivitas
-                </Typography>
-                <ChevronDownIcon
-                  strokeWidth={2.5}
-                  className={`ml-auto h-5 w-5 transition-transform ${
-                    buka === 3 ? "rotate-180" : ""
-                  }`}
-                />
+                <Typography className={`${navbarAktif === "/dataTransaksi" || navbarAktif === "/dataTestimoni" ? "text-white mr-auto font-normal" : "mr-auto font-normal"}`}>Aktivitas</Typography>
+                <ChevronDownIcon strokeWidth={2.5} className={`ml-auto h-5 w-5 transition-transform ${buka === 3 ? "rotate-180" : ""}`} />
               </AccordionHeader>
             </ListItem>
             <AccordionBody className="py-1">
               <List className="p-0">
-                <ListItem
-                  className={`${
-                    navbarAktif === "/dataTransaksi"
-                      ? "bg-blue-500 text-white"
-                      : ""
-                  }`}
-                  onClick={() => handlenavbarAktif("/dataTransaksi")}
-                >
+                <ListItem className={`${navbarAktif === "/dataTransaksi" ? "bg-blue-500 text-white" : ""}`} onClick={() => handlenavbarAktif("/dataTransaksi")}>
                   <ListItemPrefix>
                     <CreditCardIcon className="h-5 w-5" />
                   </ListItemPrefix>
                   Transaksi
                 </ListItem>
-                <ListItem
-                  className={`${
-                    navbarAktif === "/dataTestimoni"
-                      ? "bg-blue-500 text-white"
-                      : ""
-                  }`}
-                  onClick={() => handlenavbarAktif("/dataTestimoni")}
-                >
+                <ListItem className={`${navbarAktif === "/dataTestimoni" ? "bg-blue-500 text-white" : ""}`} onClick={() => handlenavbarAktif("/dataTestimoni")}>
                   <ListItemPrefix>
                     <DocumentPlusIcon className="h-5 w-5" />
                   </ListItemPrefix>
@@ -299,14 +162,9 @@ function Sidebar() {
               onClick={() => handlenavbarAktif("/profile")}
             >
               <IoPersonCircle className="h-6 w-6" />
-              <Typography className="mr-auto font-normal">
-                Profile Saya
-              </Typography>
+              <Typography className="mr-auto font-normal">Profile Saya</Typography>
             </div>
-            <div
-              className="flex items-center gap-3 hover:bg-gray-200 px-2 py-4 rounded-lg transition ease-in-out duration-200 cursor-pointer"
-              onClick={handleLogout}
-            >
+            <div className="flex items-center gap-3 hover:bg-gray-200 px-2 py-4 rounded-lg transition ease-in-out duration-200 cursor-pointer" onClick={handleLogout}>
               <IoMdLogOut className="h-6 w-6" />
               <Typography color="blue-gray" className="mr-auto font-normal">
                 Keluar
@@ -317,26 +175,14 @@ function Sidebar() {
           {/* Profile Section */}
           <div className="mt-4 flex flex-col items-center bg-white p-4 rounded-lg shadow-md">
             <div className="flex items-center w-full">
-              <Image
-                src={profilAdmin}
-                width={40}
-                height={40}
-                alt="Profile Picture"
-                className="rounded-full"
-              />
+              <Image src={profilAdmin} width={40} height={40} alt="Profile Picture" className="rounded-full" />
               <div className="ml-4">
-                <Typography className="font-semibold text-sm">
-                  HengkiGanteng
-                </Typography>
-                <Typography className="text-xs text-gray-500">
-                  HengkiGanteng@gmail.com
-                </Typography>
+                <Typography className="font-semibold text-sm">HengkiGanteng</Typography>
+                <Typography className="text-xs text-gray-500">HengkiGanteng@gmail.com</Typography>
               </div>
             </div>
           </div>
-          <Typography className=" text-xs text-gray-400 mt-5 flex justify-center">
-            @ 2025 Bhineka Developer.
-          </Typography>
+          <Typography className=" text-xs text-gray-400 mt-5 flex justify-center">@ 2025 Bhineka Developer.</Typography>
         </div>
       </List>
     </Card>
