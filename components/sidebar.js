@@ -34,6 +34,10 @@ import { IoMdLogOut } from "react-icons/io";
 import { FaBowlFood } from "react-icons/fa6";
 import { MdEmojiFoodBeverage } from "react-icons/md";
 import useNavbarAktif from "@/hooks/Frontend/useSidebarAktif";
+import Memuat from "@/components/memuat";
+import { toast } from "react-toastify";
+import { auth } from "@/lib/firebaseConfig";
+import { signOut } from "firebase/auth";
 
 const profilAdmin = require("@/assets/images/profil.jpg");
 function Sidebar() {
@@ -44,6 +48,16 @@ function Sidebar() {
   };
 
   const { navbarAktif, handlenavbarAktif } = useNavbarAktif();
+
+  const handleLogout = async () => {
+    try {
+      await signOut(auth); // Proses logout
+      toast.success("Anda telah berhasil keluar."); // Notifikasi sukses
+      window.location.href = "/"; // Arahkan ke halaman login
+    } catch (error) {
+      toast.error(`Gagal keluar: ${error.message}`); // Notifikasi error
+    }
+  };
   return (
     <Card className="h-[calc(100vh-2rem)] w-full max-w-[20rem] p-4 shadow-xl shadow-blue-gray-900/5 flex flex-col">
       <div className="mb-4 p-2">
@@ -289,7 +303,10 @@ function Sidebar() {
                 Profile Saya
               </Typography>
             </div>
-            <div className="flex items-center gap-3 hover:bg-gray-200 px-2 py-4 rounded-lg transition ease-in-out duration-200 cursor-pointer">
+            <div
+              className="flex items-center gap-3 hover:bg-gray-200 px-2 py-4 rounded-lg transition ease-in-out duration-200 cursor-pointer"
+              onClick={handleLogout}
+            >
               <IoMdLogOut className="h-6 w-6" />
               <Typography color="blue-gray" className="mr-auto font-normal">
                 Keluar
