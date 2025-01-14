@@ -71,14 +71,14 @@ function Konten() {
       <Card className="max-screen bg-white shadow-md mb-5">
         <div className="w-full flex justify-between text-blue-gray-900 p-4">
           <div className="space-y-2">
-            <Typography>Total Admin</Typography>
+            <Typography variant="h5">Total Admin</Typography>
             <Typography className="text-xl">{totalAdmin}</Typography>
           </div>
           <div className="flex items-center">
             <Button
               size="sm"
               onClick={() => setBukaModalTambahAdmin(true)}
-              className="items-center gap-2 focus:ring-0 bg-orange-400 w-40 h-8 justify-center"
+              className="items-center gap-2 focus:ring-0 bg-blue-500 w-40 h-8 justify-center"
             >
               <p className="text-white mx-auto">Tambah Admin</p>
             </Button>

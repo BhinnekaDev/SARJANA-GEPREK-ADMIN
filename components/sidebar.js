@@ -31,6 +31,8 @@ import Image from "next/image";
 import { ChevronDownIcon } from "@heroicons/react/24/outline";
 import { IoPersonCircle } from "react-icons/io5";
 import { IoMdLogOut } from "react-icons/io";
+import { FaBowlFood } from "react-icons/fa6";
+import { MdEmojiFoodBeverage } from "react-icons/md";
 import useNavbarAktif from "@/hooks/Frontend/useSidebarAktif";
 
 const profilAdmin = require("@/assets/images/profil.jpg");
@@ -57,7 +59,7 @@ function Sidebar() {
         <div>
           <ListItem
             className={`${
-              navbarAktif === "/beranda" ? "bg-orange-400 text-white" : ""
+              navbarAktif === "/beranda" ? "bg-blue-500 text-white" : ""
             }`}
             onClick={() => handlenavbarAktif("/beranda")}
           >
@@ -72,7 +74,7 @@ function Sidebar() {
             <ListItem
               className={`${
                 navbarAktif === "/dataAdmin" || navbarAktif === "/dataPengguna"
-                  ? "bg-orange-400 p-0"
+                  ? "bg-blue-500 p-0"
                   : "p-0"
               }`}
               onClick={() => tanganiBuka(1)}
@@ -110,9 +112,7 @@ function Sidebar() {
               <List className="p-0">
                 <ListItem
                   className={`${
-                    navbarAktif === "/dataAdmin"
-                      ? "bg-orange-400 text-white"
-                      : ""
+                    navbarAktif === "/dataAdmin" ? "bg-blue-500 text-white" : ""
                   }`}
                   onClick={() => handlenavbarAktif("/dataAdmin")}
                 >
@@ -124,7 +124,7 @@ function Sidebar() {
                 <ListItem
                   className={`${
                     navbarAktif === "/dataPengguna"
-                      ? "bg-orange-400 text-white"
+                      ? "bg-blue-500 text-white"
                       : ""
                   }`}
                   onClick={() => handlenavbarAktif("/dataPengguna")}
@@ -142,7 +142,7 @@ function Sidebar() {
             <ListItem
               className={`${
                 navbarAktif === "/dataMakanan" || navbarAktif === "/dataMinuman"
-                  ? "bg-orange-400 p-0"
+                  ? "bg-blue-500 p-0"
                   : "p-0"
               }`}
               onClick={() => tanganiBuka(2)}
@@ -181,24 +181,26 @@ function Sidebar() {
                 <ListItem
                   className={`${
                     navbarAktif === "/dataMakanan"
-                      ? "bg-orange-400 text-white"
+                      ? "bg-blue-500 text-white"
                       : ""
                   }`}
                   onClick={() => handlenavbarAktif("/dataMakanan")}
                 >
                   <ListItemPrefix>
-                    <InformationCircleIcon className="h-5 w-5" />
+                    <FaBowlFood className="h-5 w-5" />
                   </ListItemPrefix>
                   Makanan
                 </ListItem>
                 <ListItem
                   className={`${
-                    navbarAktif === "/dat==" ? "bg-orange-400 text-white" : ""
+                    navbarAktif === "/dataMinuman"
+                      ? "bg-blue-500 text-white"
+                      : ""
                   }`}
                   onClick={() => handlenavbarAktif("/dataMinuman")}
                 >
                   <ListItemPrefix>
-                    <CircleStackIcon className="h-5 w-5" />
+                    <MdEmojiFoodBeverage className="h-5 w-5" />
                   </ListItemPrefix>
                   Minuman
                 </ListItem>
@@ -207,12 +209,27 @@ function Sidebar() {
           </Accordion>
 
           <Accordion open={buka === 3} className=" py-1">
-            <ListItem className="p-0" onClick={() => tanganiBuka(3)}>
+            <ListItem
+              className={`${
+                navbarAktif === "/dataTransaksi" ||
+                navbarAktif === "/dataTestimoni"
+                  ? "bg-blue-500 p-0"
+                  : "p-0"
+              }`}
+              onClick={() => tanganiBuka(3)}
+            >
               <AccordionHeader className="p-3 border-none">
                 <ListItemPrefix>
                   <ClockIcon className="h-5 w-5" />
                 </ListItemPrefix>
-                <Typography color="blue-gray" className="mr-auto font-normal">
+                <Typography
+                  className={`${
+                    navbarAktif === "/dataTransaksi" ||
+                    navbarAktif === "/dataTestimoni"
+                      ? "text-white mr-auto font-normal"
+                      : "mr-auto font-normal"
+                  }`}
+                >
                   Aktivitas
                 </Typography>
                 <ChevronDownIcon
@@ -225,29 +242,31 @@ function Sidebar() {
             </ListItem>
             <AccordionBody className="py-1">
               <List className="p-0">
-                <ListItem>
-                  <ListItemPrefix>
-                    <ChartBarSquareIcon className="h-5 w-5" />
-                  </ListItemPrefix>
-                  IKM
-                </ListItem>
-                <ListItem>
-                  <ListItemPrefix>
-                    <DocumentTextIcon className="h-5 w-5" />
-                  </ListItemPrefix>
-                  Pengajuan
-                </ListItem>
-                <ListItem>
+                <ListItem
+                  className={`${
+                    navbarAktif === "/dataTransaksi"
+                      ? "bg-blue-500 text-white"
+                      : ""
+                  }`}
+                  onClick={() => handlenavbarAktif("/dataTransaksi")}
+                >
                   <ListItemPrefix>
                     <CreditCardIcon className="h-5 w-5" />
                   </ListItemPrefix>
-                  Pembayaran
+                  Transaksi
                 </ListItem>
-                <ListItem>
+                <ListItem
+                  className={`${
+                    navbarAktif === "/dataTestimoni"
+                      ? "bg-blue-500 text-white"
+                      : ""
+                  }`}
+                  onClick={() => handlenavbarAktif("/dataTestimoni")}
+                >
                   <ListItemPrefix>
                     <DocumentPlusIcon className="h-5 w-5" />
                   </ListItemPrefix>
-                  Pembuatan
+                  Testimoni
                 </ListItem>
               </List>
             </AccordionBody>
@@ -260,7 +279,7 @@ function Sidebar() {
             <div
               className={`${
                 navbarAktif === "/profile"
-                  ? "bg-orange-400 text-white flex items-center gap-3 hover:bg-gray-200 px-2 py-4 rounded-lg transition ease-in-out duration-200 cursor-pointer"
+                  ? "bg-blue-500 text-white flex items-center gap-3 hover:bg-gray-200 px-2 py-4 rounded-lg transition ease-in-out duration-200 cursor-pointer"
                   : "flex items-center gap-3 hover:bg-gray-200 px-2 py-4 rounded-lg transition ease-in-out duration-200 cursor-pointer"
               }`}
               onClick={() => handlenavbarAktif("/profile")}

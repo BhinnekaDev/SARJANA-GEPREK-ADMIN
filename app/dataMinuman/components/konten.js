@@ -6,43 +6,48 @@ import Image from "next/image";
 import { FaEdit, FaTrashAlt } from "react-icons/fa";
 
 const fotoMinuman = require("@/assets/images/LogoAyam.png");
-const menuAwalMinuman = [
+const menuAwal = [
   {
     name: "Es Teh Manis",
-    category: "Minuman Dingin",
+    category: "Minuman",
     price: "Rp 8.000",
     description: "Es teh manis segar",
     image: fotoMinuman,
-    rating: 5,
   },
   {
-    name: "Es Jeruk",
-    category: "Minuman Dingin",
-    price: "Rp 10.000",
-    description: "Es jeruk segar dari buah asli",
-    image: fotoMinuman,
-    rating: 4,
-  },
-  {
-    name: "Kopi Susu",
-    category: "Minuman Panas",
+    name: "Jus Mangga",
+    category: "Minuman",
     price: "Rp 15.000",
-    description: "Kopi susu dengan campuran gula aren",
+    description: "Jus mangga segar dan manis",
     image: fotoMinuman,
-    rating: 5,
+  },
+  {
+    name: "Es Kopi Susu",
+    category: "Minuman",
+    price: "Rp 18.000",
+    description: "Kopi susu dengan es yang menyegarkan",
+    image: fotoMinuman,
+  },
+  {
+    name: "Teh Tarik",
+    category: "Minuman",
+    price: "Rp 12.000",
+    description: "Teh tarik khas dengan rasa lembut",
+    image: fotoMinuman,
   },
   {
     name: "Air Mineral",
-    category: "Minuman Lainnya",
+    category: "Minuman",
     price: "Rp 5.000",
-    description: "Air mineral dalam kemasan botol",
+    description: "Air mineral dingin dan menyegarkan",
     image: fotoMinuman,
-    rating: 5,
   },
 ];
 
+const TABLE_HEAD = ["Gambar", "Nama", "Kategori", "Harga", "Deskripsi", "Aksi"];
+
 const Konten = () => {
-  const [menuMinuman, setMenuMinuman] = useState(menuAwalMinuman);
+  const [menuMinuman, setMenuMinuman] = useState(menuAwal);
   const [kategoriDipilih, setKategoriDipilih] = useState("Semua Kategori");
   const [menuBaru, setMenuBaru] = useState({
     name: "",
@@ -53,6 +58,13 @@ const Konten = () => {
   });
   const [modalTerbuka, setModalTerbuka] = useState(false);
 
+  // Pagination state
+  const [halaman, setHalaman] = useState(1);
+  const totalAdmin = menuMinuman.length;
+
+  const itemsPerPage = 5;
+  const totalPages = Math.ceil(totalAdmin / itemsPerPage);
+
   const bukaModal = () => setModalTerbuka(true);
   const tutupModal = () => setModalTerbuka(false);
 
@@ -62,13 +74,7 @@ const Konten = () => {
   };
 
   const tambahMenu = () => {
-    setMenuMinuman((prev) => [
-      ...prev,
-      {
-        ...menuBaru,
-        rating: 0,
-      },
-    ]);
+    setMenuMinuman((prev) => [...prev, { ...menuBaru }]);
     setMenuBaru({
       name: "",
       category: "",
@@ -76,7 +82,6 @@ const Konten = () => {
       description: "",
       image: "",
     });
-    tutupModal();
   };
 
   const hapusMenu = (index) => {
@@ -85,8 +90,8 @@ const Konten = () => {
 
   const suntingMenu = (index) => {
     const item = menuMinuman[index];
-    setMenuBaru(item); // Set nilai menu untuk diedit
-    bukaModal(); // Buka modal untuk pengeditan
+    setMenuBaru(item);
+    bukaModal();
   };
 
   const menuDifilter =
@@ -94,37 +99,52 @@ const Konten = () => {
       ? menuMinuman
       : menuMinuman.filter((item) => item.category === kategoriDipilih);
 
+  const menuPerHalaman = menuDifilter.slice(
+    (halaman - 1) * itemsPerPage,
+    halaman * itemsPerPage
+  );
+
+  const ambilHalamanSebelumnya = () => {
+    if (halaman > 1) {
+      setHalaman(halaman - 1);
+    }
+  };
+
+  const ambilHalamanBerikutnya = () => {
+    if (halaman < totalPages) {
+      setHalaman(halaman + 1);
+    }
+  };
+
   return (
     <div className="flex flex-col gap-6">
       <Card className="p-6 bg-white rounded-lg shadow-lg">
         <div className="flex justify-between items-center mb-6">
-          <Typography variant="h3" className="text-orange-600 font-extrabold">
+          <Typography variant="h3" className="text-black font-extrabold">
             Menu Minuman
           </Typography>
           <Button
             onClick={bukaModal}
-            className="bg-orange-500 hover:bg-orange-700 shadow-lg"
+            className="bg-blue-500 hover:bg-blue-700 shadow-lg text-white"
           >
             Tambah Menu
           </Button>
         </div>
 
-        <p className="text-sm text-gray-600 mb-4">
+        <p className="text-sm text-black mb-4">
           Pilih minuman favorit Anda dari daftar di bawah ini.
         </p>
         <select
           value={kategoriDipilih}
           onChange={(e) => setKategoriDipilih(e.target.value)}
-          className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-orange-500"
+          className="w-full px-3 py-2 border border-gray-300 rounded-lg text-blue-gray-900 text-sm "
         >
           <option value="Semua Kategori">Semua Kategori</option>
-          <option value="Minuman Dingin">Minuman Dingin</option>
-          <option value="Minuman Panas">Minuman Panas</option>
-          <option value="Minuman Lainnya">Minuman Lainnya</option>
+          <option value="Minuman">Minuman</option>
+          <option value="Lainnya">Lainnya</option>
         </select>
       </Card>
 
-      {/* Modal untuk menambahkan menu baru */}
       <ModalTambahMenuMinuman
         terbuka={modalTerbuka}
         ubahStatusModal={tutupModal}
@@ -133,78 +153,111 @@ const Konten = () => {
         tambahMenu={tambahMenu}
       />
 
-      {/* Tabel menu minuman */}
       <Card className="p-6 bg-white rounded-lg shadow-lg">
-        <Typography variant="h4" className="text-orange-600 font-bold mb-6">
+        <Typography variant="h4" className="text-black font-bold mb-6">
           Data Minuman
         </Typography>
-        <div className="overflow-x-auto">
-          <table className="table-auto w-full text-left border-collapse border border-gray-300">
-            <thead>
-              <tr className="bg-orange-100 text-orange-600">
-                <th className="border border-gray-300 px-6 py-3 text-sm font-bold">
-                  Gambar
-                </th>
-                <th className="border border-gray-300 px-6 py-3 text-sm font-bold">
-                  Nama
-                </th>
-                <th className="border border-gray-300 px-6 py-3 text-sm font-bold">
-                  Kategori
-                </th>
-                <th className="border border-gray-300 px-6 py-3 text-sm font-bold">
-                  Harga
-                </th>
-                <th className="border border-gray-300 px-6 py-3 text-sm font-bold">
-                  Deskripsi
-                </th>
-                <th className="border border-gray-300 px-6 py-3 text-sm font-bold">
-                  Rating
-                </th>
-                <th className="border border-gray-300 px-6 py-3 text-sm font-bold">
-                  Aksi
-                </th>
+        <div>
+          <table className="w-full min-w-max table-auto text-center">
+            <thead className="text-center">
+              <tr>
+                {TABLE_HEAD.map((head) => (
+                  <th
+                    key={head}
+                    className="border-b border-blue-gray-100 bg-blue-gray-50 p-4"
+                  >
+                    <Typography
+                      variant="small"
+                      color="blue-gray"
+                      className="font-normal leading-none opacity-70"
+                    >
+                      {head}
+                    </Typography>
+                  </th>
+                ))}
               </tr>
             </thead>
             <tbody>
-              {menuDifilter.map((item, index) => (
-                <tr key={index} className="hover:bg-gray-100">
-                  <td className="border border-gray-300 px-6 py-3">
+              {menuPerHalaman.map((item, index) => (
+                <tr key={index}>
+                  <td
+                    className={
+                      index === menuPerHalaman.length - 1
+                        ? "p-4 flex items-center justify-center"
+                        : "p-4 border-b border-blue-gray-50 flex items-center justify-center"
+                    }
+                  >
                     <Image
                       src={item.image}
                       alt={item.name}
                       width={50}
                       height={50}
-                      className="rounded-md shadow-md"
+                      className="rounded-md shadow-md flex items-center justify-center"
                     />
                   </td>
-                  <td className="border border-gray-300 px-6 py-3 text-gray-700">
-                    {item.name}
+                  <td
+                    className={
+                      index === menuPerHalaman.length - 1
+                        ? "p-4"
+                        : "p-4 border-b border-blue-gray-50"
+                    }
+                  >
+                    <Typography variant="small" color="blue-gray ">
+                      {item.name}
+                    </Typography>
                   </td>
-                  <td className="border border-gray-300 px-6 py-3 text-gray-700">
-                    {item.category}
+                  <td
+                    className={
+                      index === menuPerHalaman.length - 1
+                        ? "p-4"
+                        : "p-4 border-b border-blue-gray-50"
+                    }
+                  >
+                    <Typography variant="small" color="blue-gray ">
+                      {item.category}
+                    </Typography>
                   </td>
-                  <td className="border border-gray-300 px-6 py-3 text-gray-700">
-                    {item.price}
+                  <td
+                    className={
+                      index === menuPerHalaman.length - 1
+                        ? "p-4"
+                        : "p-4 border-b border-blue-gray-50"
+                    }
+                  >
+                    <Typography variant="small" color="blue-gray ">
+                      {item.price}
+                    </Typography>
                   </td>
-                  <td className="border border-gray-300 px-6 py-3 text-gray-700">
-                    {item.description}
+                  <td
+                    className={
+                      index === menuPerHalaman.length - 1
+                        ? "p-4"
+                        : "p-4 border-b border-blue-gray-50"
+                    }
+                  >
+                    <Typography variant="small" color="blue-gray ">
+                      {item.description}
+                    </Typography>
                   </td>
-                  <td className="border border-gray-300 px-6 py-3 text-gray-700">
-                    ⭐ {item.rating} / 5
-                  </td>
-                  <td className="border border-gray-300 px-6 py-3 text-gray-700">
-                    <div className="flex justify-center gap-4">
+                  <td
+                    className={
+                      index === menuPerHalaman.length - 1
+                        ? "p-4"
+                        : "p-4 border-b border-blue-gray-50"
+                    }
+                  >
+                    <div className="flex justify-center items-center gap-4">
                       <Button
                         onClick={() => suntingMenu(index)}
                         size="sm"
-                        className="text-orange-500 hover:text-orange-700 bg-transparent"
+                        className="text-blue-500 hover:text-blue-700 bg-transparent"
                       >
                         <FaEdit />
                       </Button>
                       <Button
                         onClick={() => hapusMenu(index)}
                         size="sm"
-                        className="text-red-500 hover:text-red-700 bg-transparent"
+                        className="text-blue-500 hover:text-blue-700 bg-transparent"
                       >
                         <FaTrashAlt />
                       </Button>
@@ -214,6 +267,31 @@ const Konten = () => {
               ))}
             </tbody>
           </table>
+        </div>
+
+        {/* Pagination */}
+        <div className="flex justify-between items-center mt-4">
+          <Typography variant="small" color="blue-gray" className="font-normal">
+            Halaman {halaman} dari {totalPages}
+          </Typography>
+          <div className="flex items-center gap-2">
+            <Button
+              onClick={ambilHalamanSebelumnya}
+              variant="outlined"
+              size="sm"
+              disabled={halaman === 1}
+            >
+              Sebelumnya
+            </Button>
+            <Button
+              onClick={ambilHalamanBerikutnya}
+              variant="outlined"
+              size="sm"
+              disabled={halaman === totalPages}
+            >
+              Berikutnya
+            </Button>
+          </div>
         </div>
       </Card>
     </div>
