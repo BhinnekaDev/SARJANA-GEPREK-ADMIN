@@ -31,12 +31,12 @@ import { auth } from "@/lib/firebaseConfig";
 import { signOut } from "firebase/auth";
 
 // MY HOOKS
-import useLogout from "@/hooks/Backend/useKeluarAkun";
+import useKeluarAkun from "@/hooks/Backend/useKeluarAkun";
 
 const profilAdmin = require("@/assets/images/profil.jpg");
 function Sidebar() {
   const [buka, setBuka] = useState(0);
-  const handleLogout = useLogout();
+  const tanganiKeluarAkun = useKeluarAkun();
 
   const tanganiBuka = (nilai) => {
     setBuka(buka === nilai ? 0 : nilai);
@@ -164,7 +164,7 @@ function Sidebar() {
               <IoPersonCircle className="h-6 w-6" />
               <Typography className="mr-auto font-normal">Profile Saya</Typography>
             </div>
-            <div className="flex items-center gap-3 hover:bg-gray-200 px-2 py-4 rounded-lg transition ease-in-out duration-200 cursor-pointer" onClick={handleLogout}>
+            <div className="flex items-center gap-3 hover:bg-gray-200 px-2 py-4 rounded-lg transition ease-in-out duration-200 cursor-pointer" onClick={tanganiKeluarAkun}>
               <IoMdLogOut className="h-6 w-6" />
               <Typography color="blue-gray" className="mr-auto font-normal">
                 Keluar

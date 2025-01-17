@@ -3,8 +3,8 @@ import { signOut } from "firebase/auth";
 import { toast } from "react-toastify";
 import { auth } from "@/lib/firebaseConfig";
 
-const useLogout = () => {
-  const handleLogout = useCallback(async () => {
+const useKeluarAkun = () => {
+  const tanganiKeluarAkun = useCallback(async () => {
     try {
       await signOut(auth);
       toast.success("Anda telah berhasil keluar.", { autoClose: 3000 });
@@ -17,7 +17,7 @@ const useLogout = () => {
     }
   }, []);
 
-  return handleLogout;
+  return tanganiKeluarAkun;
 };
 
-export default useLogout;
+export default useKeluarAkun;
