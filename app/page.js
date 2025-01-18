@@ -5,6 +5,8 @@ import { motion } from "framer-motion";
 import Image from "next/image";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
+
 // COMPONENTS
 import Memuat from "@/components/memuat";
 // HOOKS
@@ -81,6 +83,8 @@ const LoginAdmin = () => {
     await masukDenganEmail(email, password);
   };
 
+  const [showPassword, setShowPassword] = useState(false);
+
   return (
     <div className="bg-white h-screen flex justify-center items-center ">
       <ToastContainer />
@@ -150,15 +154,28 @@ const LoginAdmin = () => {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
               />
-              <Input
-                label="Kata Sandi"
-                name="password"
-                type="password"
-                variant="outlined"
-                className="w-full bg-gray-100 rounded-lg"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-              />
+              <div className="relative">
+                <Input
+                  label="Kata Sandi"
+                  name="password"
+                  type={showPassword ? "text" : "password"}
+                  variant="outlined"
+                  className="w-full bg-gray-100 rounded-lg"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                />
+                <div
+                  className="absolute top-2/4 right-3 transform -translate-y-2/4 cursor-pointer text-gray-500"
+                  onClick={() => setShowPassword((prev) => !prev)}
+                >
+                  {showPassword ? (
+                    <AiOutlineEye size={20} />
+                  ) : (
+                    <AiOutlineEyeInvisible size={20} />
+                  )}
+                </div>
+              </div>
+
               <Button
                 type="submit"
                 color="yellow"
