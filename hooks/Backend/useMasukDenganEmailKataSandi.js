@@ -27,7 +27,11 @@ const useMasukDenganEmailKataSandi = () => {
     setSedangMemuat(true);
 
     try {
-      const kredentialsAdmin = await signInWithEmailAndPassword(auth, email, password);
+      const kredentialsAdmin = await signInWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
 
       if (kredentialsAdmin.user) {
         localStorage.setItem("ID_Admin", kredentialsAdmin.user.uid);
@@ -42,7 +46,7 @@ const useMasukDenganEmailKataSandi = () => {
       } else if (error.code === "auth/invalid-email") {
         toast.error("Format email tidak valid.");
       } else {
-        toast.error("Akun tidak ditemukan.");
+        toast.error("Email atau kata sandi Anda tidak sesuai.");
       }
     } finally {
       setSedangMemuat(false);
