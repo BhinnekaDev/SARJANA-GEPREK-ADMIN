@@ -96,17 +96,14 @@ function Konten() {
           { label: "Peran", name: "Peran", value: adminData?.Peran_Admin },
         ].map((field, index) => (
           <div key={index}>
-            <Typography className="font-medium text-gray-700">
-              {field.label}
-            </Typography>
             {field.component ? (
               field.component
             ) : (
               <Input
+                label={field.label}
                 name={field.name}
                 value={field.value}
                 onChange={tanganiInput}
-                className="mt-1"
                 disabled={!isEditable}
               />
             )}

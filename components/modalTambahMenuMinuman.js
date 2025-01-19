@@ -36,12 +36,16 @@ const ModalTambahMenuMinuman = ({
             value={menuBaru.name}
             onChange={ubahInputMenu}
           />
-          <Input
-            label="Kategori Minuman"
+          <select
+            label="Kategori"
             name="category"
             value={menuBaru.category}
             onChange={ubahInputMenu}
-          />
+          >
+            <option value="">Pilih Kategori</option>
+            <option value="Makanan Berat">Minuman Coffe</option>
+            <option value="Makanan Ringan">Minumman Non Coffe</option>
+          </select>
           <Input
             label="Harga"
             name="price"

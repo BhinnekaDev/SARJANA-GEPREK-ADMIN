@@ -140,8 +140,8 @@ const Konten = () => {
           className="w-full px-3 py-2 border border-gray-300 rounded-lg text-blue-gray-900 text-sm "
         >
           <option value="Semua Kategori">Semua Kategori</option>
-          <option value="Minuman">Minuman</option>
-          <option value="Lainnya">Lainnya</option>
+          <option value="Minuman">Minuman Coffe</option>
+          <option value="Lainnya">Minuman Non Coffe</option>
         </select>
       </Card>
 

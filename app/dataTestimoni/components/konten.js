@@ -48,7 +48,7 @@ function Konten() {
 
   return (
     <div>
-      <Card className="max-screen bg-white shadow-md mb-5">
+      <Card className=" bg-white shadow-md mb-5">
         <div className="w-full flex justify-between text-blue-gray-900 p-4">
           <div className="space-y-2">
             <Typography variant="h5">Total Testimonial</Typography>
